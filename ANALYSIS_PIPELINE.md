@@ -793,6 +793,8 @@ The intermediate arrays are stored in `processed_tensors/` as `.npy` files, toge
 
 ## 9. References
 
+$\color{blue}{\textsf{add the scientific reports paper for I_diff. the quantification comes strictly from there. check the 'papers' folder on overleaf.}}$
+
 1. Bertrand, O., Perrin, F., & Pernier, J. (1985). A theoretical justification of the average reference in topographic evoked potential studies. *Electroencephalography and Clinical Neurophysiology*, 62(6), 462–464.
 2. Nunez, P. L., & Srinivasan, R. (2006). *Electric Fields of the Brain: The Neurophysics of EEG* (2nd ed.). Oxford University Press.
 3. Yao, D. (2001). A method to standardize a reference of scalp EEG recordings to a point at infinity. *Physiological Measurement*, 22(4), 693–711.
