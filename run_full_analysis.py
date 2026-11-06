@@ -6,18 +6,21 @@ import argparse
 import importlib
 import time
 
+from analysis_pipeline.config import N_PERMUTATIONS, SEED
+
 
 def main():
     parser = argparse.ArgumentParser(description="Master Infant EEG Longitudinal Analysis Pipeline")
     parser.add_argument("--start-phase", type=int, default=2, help="Phase number to start from (default: 2)")
-    parser.add_argument("--permutations", type=int, default=200000, help="Number of permutations and bootstrap draws (default: 2,00,000)")
+    parser.add_argument("--permutations", type=int, default=N_PERMUTATIONS, help="Number of permutations and bootstrap draws (default: 200,000, used for the reported results)")
     parser.add_argument("--workers", type=int, default=8, help="Number of parallel worker processes (default: 8)")
+    parser.add_argument("--robustness-permutations", type=int, default=N_PERMUTATIONS, help="Permutations and bootstrap draws of each Phase 7 robustness check (default: 200,000)")
     args = parser.parse_args()
 
     t_start = time.time()
     print("=" * 80)
     print("STARTING FULL INFANT EEG LONGITUDINAL PIPELINE (N = 19)")
-    print(f"Start Phase: {args.start_phase} | Permutations: {args.permutations} | Workers: {args.workers}")
+    print(f"Start Phase: {args.start_phase} | Permutations: {args.permutations} | Seed: {SEED} (config.py) | Workers: {args.workers}")
     print("=" * 80)
 
     if args.start_phase <= 1:
@@ -46,7 +49,7 @@ def main():
 
     if args.start_phase <= 7:
         mod7 = importlib.import_module("analysis_pipeline.07_robustness_checks")
-        mod7.run_robustness_checks()
+        mod7.run_robustness_checks(n_permutations=args.robustness_permutations, n_workers=args.workers)
 
     if args.start_phase <= 8:
         mod8 = importlib.import_module("analysis_pipeline.08_export_tables")

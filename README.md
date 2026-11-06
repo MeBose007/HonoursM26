@@ -43,8 +43,17 @@ It skips phase 1 by default, because phase 1 only rebuilds the input data, which
 .venv/bin/python run_full_analysis.py --start-phase 1 --permutations 200000 --workers 8
 ```
 
-- `--permutations`: how many random shuffles to use for the significance tests (default 200,000; fewer runs faster). Phases 2–4 also use this number of draws for their bootstrap confidence intervals.
-- `--workers`: how many CPU cores to use (default 8).
+- `--permutations`: how many random shuffles to use for the significance tests (default 200,000, the value used for the reported results; fewer runs faster). Phases 2, 3, 4 and 6 also use this number of draws for their bootstrap confidence intervals.
+- `--workers`: how many CPU cores to use (default 8). The results do not depend on it.
+- `--robustness-permutations`: how many random shuffles and bootstrap draws each robustness check in phase 7 uses (default 200,000).
+
+Every random step uses the one seed `SEED = 42` in `analysis_pipeline/config.py`, so a rerun with the same settings gives exactly the same numbers. Each results file records the seed.
+
+To check the closeness calculations against values worked out by hand on small example networks (Step 0 of the plan):
+
+```bash
+.venv/bin/python tests/test_edge_closeness.py
+```
 
 You can also run a single step on its own, for example:
 
@@ -86,9 +95,9 @@ All babies change in similar ways between 3 and 6 months. Subtracting D removes 
 | 4 | `04_compute_identifiability.py` | Comparisons C and D: can we recognise each baby across sessions? |
 | 5 | `05_taxonomy_and_variance.py` | Sorts each brain connection into "shared", "personal", "both" or "neither", and measures how much of the variation comes from the baby, the session and moment-to-moment noise. |
 | 6 | `06_developmental_and_twins.py` | Checks how results relate to age and to the time between sessions, and looks at the one twin pair in the group. |
-| 7 | `07_robustness_checks.py` | Repeats the key results with 9 different method choices (88 runs in total) to make sure they hold up. |
+| 7 | `07_robustness_checks.py` | Repeats the key results with 9 different method choices, one at a time, to make sure they hold up. |
 | 8 | `08_export_tables.py` | Writes the final tables T1–T6. |
-| 9 | `09_generate_figures.py` | Draws the final Figures 1–7. |
+| 9 | `09_generate_figures.py` | Draws the final Figures 1–7, the twin figure and the threshold bar charts, plus supplements that cover all 26 features. |
 
 ---
 
@@ -110,10 +119,14 @@ HonoursM26/
 │
 ├── tables/                         # Final results tables (CSV, plus Markdown for most)
 │   ├── Table_T1_Global_Summary     # Headline numbers for each of the 26 features
+│   ├── Table_T1b_Interval_Correlations # Self-similarity vs. time between visits and age, and the two short-gap infants
 │   ├── Table_T2_Element_Results    # Results for every single node and connection (3,230 rows)
+│   ├── Table_T2b_Regional_Universality # How similar babies are, region by region
 │   ├── Table_T3_Variance_Partition # Baby vs. session vs. noise breakdown for each node/connection
-│   ├── Table_T4_Robustness         # Results of the 88 robustness runs
-│   ├── Table_T5_Bookkeeping        # Ages and recording dates for the 19 infants
+│   ├── Table_T4_Robustness         # Main results under each robustness check (one row per check and feature)
+│   ├── Table_T4b_Electrode_Distance # How universality and individuality relate to electrode distance
+│   ├── Table_T5_Bookkeeping        # Sex, ages, time between visits and epoch counts for the 19 infants
+│   ├── Table_T5b_Threshold_Bookkeeping # Thresholds and number of links of the binary networks, per session
 │   └── Table_T6_Sibling_Analysis   # How similar the twin pair (sub-NORB00086 & 00087) is
 │
 ├── figures/                        # Final figures (each as PDF and PNG)
@@ -124,12 +137,13 @@ HonoursM26/
 │   ├── Figure_4 …                  # Head maps showing which brain areas are most personal
 │   ├── Figure_5 …                  # Changes with age and with time between sessions
 │   ├── Figure_6 …                  # Baby vs. session vs. noise breakdown
-│   └── Figure_7 …                  # Pair-by-pair similarity heatmaps and the twin check
+│   ├── Figure_7 …                  # Pair-by-pair similarity heatmaps, the twin check, and how often similarity passes 0.3 / 0.5 / 0.75 / 0.9 per brain region
+│   └── *_Supplementary_*           # The same figures for all 26 features (some are multi-page PDFs)
 │
-├── processed_tensors/              # Saved in-between results, so later phases can rerun quickly (374 files)
+├── processed_tensors/              # Saved in-between results, so later phases can rerun quickly (426 files)
 │   ├── README.md                   # What every file contains and its shape
 │   ├── X_*.npy                     # The 26 feature sets (output of phase 1)
-│   ├── J_pair_*, S_mat_*           # Baby-to-baby similarity within a session (phase 2)
+│   ├── J_pair_*, J_region_*, S_mat_*  # Baby-to-baby similarity within a session (phase 2)
 │   ├── W_elem_*, O_elem_*, diff_within_elem_*  # Within-session stability (phase 3)
 │   ├── M_*, M_mat_*, M_elem_*      # Cross-session similarity (phase 4)
 │   ├── metadata.json               # The infant list, electrode order and feature names

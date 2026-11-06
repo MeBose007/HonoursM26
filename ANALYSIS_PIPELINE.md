@@ -251,6 +251,23 @@ How to read the table: ages are in months (mo) at each visit; the *inter-session
 | `sub-NORB00096` | M | 2.73 | 6.00 | 3.27 | 20 | 20 | Singleton |
 | `sub-NORB00103` | F | 2.89 | 6.28 | 3.39 | 35 | 20 | Singleton |
 
+The exported `Table_T5_Bookkeeping.csv` holds the same information with ages and the interval in days (as the specification asks), and lists annotated and usable epochs separately.
+
+**GCC threshold bookkeeping (Table T5b, Step 0, item 5).** For every binary network built with the GCC rule (12 windows × 19 infants = 228 networks per session and family), the threshold $\tau_c$ and the number of links kept (density = links / 171):
+
+| Network | Session | $\tau_c$ min / median / max | Links min / median / max | Density min / median / max |
+| :--- | :---: | :---: | :---: | :---: |
+| Broadband | `ses-1` | 0.25 / 0.50 / 0.90 | 29 / 59 / 145 | 0.170 / 0.345 / 0.848 |
+| Broadband | `ses-2` | 0.25 / 0.55 / 0.90 | 27 / 57.5 / 145 | 0.158 / 0.336 / 0.848 |
+| Delta | `ses-1` | 0.20 / 0.50 / 0.90 | 28 / 61 / 137 | 0.164 / 0.357 / 0.801 |
+| Delta | `ses-2` | 0.20 / 0.60 / 0.90 | 30 / 57.5 / 127 | 0.175 / 0.336 / 0.743 |
+| Theta | `ses-1` | 0.25 / 0.50 / 0.80 | 32 / 57 / 152 | 0.187 / 0.333 / 0.889 |
+| Theta | `ses-2` | 0.30 / 0.55 / 0.80 | 27 / 56.5 / 121 | 0.158 / 0.330 / 0.708 |
+| Alpha | `ses-1` | 0.20 / 0.50 / 0.70 | 28 / 50 / 135 | 0.164 / 0.292 / 0.790 |
+| Alpha | `ses-2` | 0.25 / 0.50 / 0.80 | 26 / 46 / 140 | 0.152 / 0.269 / 0.819 |
+| Beta | `ses-1` | 0.15 / 0.50 / 0.80 | 27 / 57 / 154 | 0.158 / 0.333 / 0.901 |
+| Beta | `ses-2` | 0.25 / 0.45 / 0.75 | 27 / 45.5 / 133 | 0.158 / 0.266 / 0.778 |
+
 ---
 
 ## 3. The 26 Feature Sets & Input Tensors (Step 1)
@@ -337,7 +354,8 @@ The elements are always stored in the same order, in every file and for every in
 * **Eigenvector centrality** (f06, f07, f15, f16): an electrode is important if it is linked to other important electrodes, like being popular among popular people. Mathematically the values come from the principal eigenvector (the dominant pattern) of the weight table $W$ or the adjacency table $A$. The edge versions are computed on the line graph, where each link becomes a node.
 * **Closeness** (f08, f09, f17, f18): how near an electrode is to all the others; short routes to everyone mean high closeness. Node closeness $c_u$ is the standard version: (number of other electrodes) divided by the sum of the shortest-route lengths from $u$ to all of them. The edge versions are *not* computed on the line graph; they combine the closeness of the two endpoints:
   $$\text{edge closeness}(u, v) = (E - 1)\,\frac{c_u\, c_v}{c_u + c_v}$$
-  where $E$ is the number of links in the network (formula as cited in `utils.py`, Bröhl & Lehnertz, 2022).
+  where $E$ is the number of links in the network (formula as cited in `utils.py`, Bröhl & Lehnertz, 2022, Eq. 3).
+  * **Checked by hand (Step 0, item 3).** `tests/test_edge_closeness.py` computes node and edge closeness on two toy networks and compares them with values worked out by hand: a binary triangle with one extra node attached (edge closeness $9/8$, $9/7$, $9/7$, $9/8$) and a weighted triangle in which one shortest route goes through the third node (edge closeness $1/2$, $4/7$, $4/9$). All values match. Bröhl & Lehnertz also write the edge closeness as $(E - 1) / \sum_i (d_{ia} + d_{ib})$, which is smaller than the formula above by the constant factor $V - 1 = 18$; a constant factor does not change any Jaccard similarity. The plan asks for Eq. (9) of the Communications Physics paper, whose code is not in this repository; the toy values above are the ones to compare with it.
 
 **Dimension ($n$)** is 19 for node features and 171 for edge features.
 
@@ -365,7 +383,7 @@ Take two lists of non-negative numbers, $x_1$ and $x_2$ (written $x_1, x_2 \ge 0
    $$S^{(k_1, k_2)} = \frac{\sum_{e=1}^n \min\{x_{R_1, k_1}(e), x_{R_2, k_2}(e)\}}{\sum_{e=1}^n \max\{x_{R_1, k_1}(e), x_{R_2, k_2}(e)\}}$$
    In words: for every element take the smaller of the two values and add them all up; do the same with the larger values; divide the first total by the second. Elements with large values therefore count for more than elements with small values. *Example* with three elements: $x_1 = [7, 2, 4]$ and $x_2 = [5, 3, 4]$ give $(5 + 2 + 4) / (7 + 3 + 4) = 11 / 14 = 0.79$.
    * Joint absences ($0 + 0$) simply add 0 to both totals, so no special rule is needed.
-   * **Edge case at this level:** if *every* element is 0 in both windows, both totals are 0 and $S$ is again $0/0$. The code then sets $S = 0$, so at the recording level the $0/0 \to 0$ rule is the one used. This only happens in f02 (node betweenness), where 7 of the 456 epochs have all 19 values equal to 0; if only one of the two windows is all zero, $S = 0$ in the normal way.
+   * **Edge case at this level:** if *every* element is 0 in both windows, both totals are 0 and $S$ is again $0/0$. The same rule as for single elements applies: that window pair is undefined and left out of the average over $P$ below (if every pair of a comparison were undefined, $S_{R_1 R_2}$ would be `NaN`). This only happens in f02 (node betweenness), where 7 of the 456 epochs have all 19 values equal to 0 (`sub-NORB00079` `ses-2` windows 1–4 and 6, `sub-NORB00081` `ses-1` windows 1–2). No within-session comparison pairs two such windows; in $M$ it affects 2 of the 12 window pairs of $M[\text{00081}, \text{00079}]$, which is then the average of the other 10. If only one of the two windows is all zero, $S = 0$ in the normal way. Step 8 check 1 sets these to 0 instead.
    * The overall similarity of two recordings is the average over the set $P$ of epoch pairs being compared (Section 4.2), where $(k_1, k_2) \in P$ means "each pair of windows in $P$" and $\lvert P \rvert$ is how many pairs there are:
      $$S_{R_1 R_2} = \frac{1}{|P|} \sum_{(k_1, k_2) \in P} S^{(k_1, k_2)}$$
 
@@ -456,12 +474,12 @@ flowchart TD
      Yes, $a$ and $b$ are infant (subject) indices. "Per-infant universality" and "universality across the population" do not contradict each other: $u_s(a)$ is infant $a$'s share of the population value, i.e. how *typical* infant $a$ is of the group. Averaging $u_s(a)$ over all 19 infants gives back exactly $U_s$, because every pair is counted once from each side:
      $$\frac{1}{19} \sum_{a=1}^{19} u_s(a) = \frac{1}{19 \times 18} \sum_{a \ne b} S_{(a,s), (b,s)} = \frac{1}{171} \sum_{a < b} S_{(a,s), (b,s)} = U_s$$
      So $U_s$ describes the group, and $u_s(a)$ shows each infant's contribution to it; "per-infant typicality" may be a clearer name.
-  4. **Regional universality:** $U_s(g)$, the average of $U_s(e)$ over the elements in region $g$, for each of the 5 node regions and the 15 edge region pairs (Section 3.1).
+  4. **Regional universality:** for every pair of infants, average $J(e)$ over the elements in region $g$, for each of the 5 node regions or 15 edge region pairs (Section 3.1). This gives a $171 \times G$ matrix (171 pairs, $G$ regions), saved as `J_region_{fid}_{ses}.npy`; $U_s(g)$ is the average of its column $g$. It is reported as mean $\pm$ SD over the 171 pairs and median [95% CI] from the infant bootstrap, which resamples infants exactly as for $U_s$ (Table T2b).
   5. **Element-shuffle null model (significance testing):** checks whether infants are similar at the *same* elements, rather than merely having values in a similar range.
      * For each infant pair $(a, b)$, shuffle the element labels of the second infant with a random permutation $\pi$, so that, for example, infant $a$'s `Fp1` is compared with infant $b$'s `O2`. The same shuffle is used for all 12 windows of that pair, and every pair gets its own shuffle.
-     * Recompute $U_s(e)$ (and $U_s$) from the shuffled data. Repeat this for 200,000 iterations.
+     * Recompute $U_s(e)$ (and $U_s$) from the shuffled data. Repeat this for $B = 200{,}000$ iterations.
      * One-sided $p$-value ("one-sided" because the only question is whether the real similarity is *higher* than chance):
-       $$p = \frac{1 + \sum [\text{null} \ge \text{observed}]}{1 + 200{,}000}$$
+       $$p = \frac{1 + \sum [\text{null} \ge \text{observed}]}{1 + 10{,}000}$$
        Here $[\text{null} \ge \text{observed}]$ is 1 when a shuffled result is at least as large as the real one and 0 otherwise, so the sum counts those shuffles. Adding 1 on top and bottom counts the real result as one of the possible outcomes, so $p$ can never be exactly 0.
 
 ---
@@ -480,8 +498,8 @@ flowchart TD
   3. **Matched-others baseline:** the same comparison, but against *other* infants. Compare infant $a$'s first half with infant $b$'s second half ($b \ne a$), using the same pairing $(k, k+6)$, and average over the 18 other infants:
      $$O_s(a) = \frac{1}{18} \sum_{b \ne a} S_{(a,s,\text{first}), (b,s,\text{second})}$$
      The $\frac{1}{18}$ is an average over the other infants. **Is there also a normalisation within each infant's own network?** No separate step is applied, for two reasons. First, the score $S$ is already a ratio inside every window pair (sum of minima ÷ sum of maxima), so it always lies between 0 and 1. Second, item 4 below subtracts $O_s(a)$ from $W_s(a)$, so each infant is measured against their own baseline. The feature values themselves are not rescaled per infant or per window in the main analysis. A difference in the overall level of two networks therefore does lower $S$; Step 8 check 5 (pattern-only normalisation, where each window's values are divided by their total) tests whether that matters.
-  4. **Within-session identifiability:** $W_s(a) - O_s(a)$, i.e. how much more an infant resembles themselves than others within one session. It is tested against 0 with the infant-level bootstrap (Phase 7).
-  5. **Odd/even sensitivity:** repeat the split with a different pairing, matching each odd-numbered epoch with the even-numbered epoch right after it, $(k, k+1)$: window 1 with 2, 3 with 4, and so on up to 11 with 12. These windows are closer together in time.
+  4. **Within-session identifiability:** $W_s(a) - O_s(a)$, i.e. how much more an infant resembles themselves than others within one session, and the same for every element, $W_s(a, e) - O_s(a, e)$. Both are tested against 0 with the infant-level bootstrap (Phase 7): an ordinary bootstrap of the 19 per-infant differences, with the two-sided bootstrap p-value. The element p-values are FDR-corrected across the elements of each feature (Table T2).
+  5. **Odd/even sensitivity:** repeat items 2–4 with a different pairing, matching each odd-numbered epoch with the even-numbered epoch right after it, $(k, k+1)$: window 1 with 2, 3 with 4, and so on up to 11 with 12. These windows are closer together in time. The matched others compare infant $a$'s odd windows with every other infant's even windows, with the same pairing. All results of the split (self, others and their difference, at recording and element level, with the same tests) are saved under `odd_even_sensitivity` in `within_session_results.json`.
 
 ---
 
@@ -497,18 +515,18 @@ flowchart TD
        $$I_{\text{self}} = \frac{1}{19} \sum_{a=1}^{19} M[a, a]$$
      * Others-similarity (Comparison D), the average of the $19 \times 18 = 342$ off-diagonal cells:
        $$I_{\text{others}} = \frac{1}{19 \times 18} \sum_{a \ne b} M[a, b]$$
-     * **Differential identifiability**, multiplied by 100 so that it reads on a 0–100 scale (a difference of 0.05 becomes 5):
-       $$I_{\text{diff}} = (I_{\text{self}} - I_{\text{others}}) \times 100$$
+     * **Differential identifiability**, in Jaccard units like the two similarities it compares (Step 7.5; it is not rescaled):
+       $$I_{\text{diff}} = I_{\text{self}} - I_{\text{others}}$$
   3. **Identification accuracy (1-nearest neighbour):** can each infant be picked out from the group?
      * **Forward (`ses-1` $\to$ `ses-2`):** for infant $a$'s first-visit recording (row $a$), the predicted identity is the second-visit recording it is most similar to, $\arg\max_b M[a, b]$ (the column with the highest value in that row). The prediction is correct if $b = a$.
      * **Backward (`ses-2` $\to$ `ses-1`):** for infant $b$'s second-visit recording (column $b$), the predicted identity is $\arg\max_a M[a, b]$ (the row with the highest value in that column). The prediction is correct if $a = b$.
      * Ties (two cells sharing the highest value) count as incorrect. Guessing at random among 19 infants would be right $1/19 = 5.26\%$ of the time; this is the chance baseline.
   4. **Element-level identifiability:** the same calculations done one element at a time. Compute $M_e[a, b] = J_{(a, 1), (b, 2)}(e)$, the average of $J(e)$ over the 12 matched window pairs, to obtain $I_{\text{self}}(e)$, $I_{\text{others}}(e)$ and $I_{\text{diff}}(e)$:
      $$I_{\text{self}}(e) = \frac{1}{19} \sum_{a=1}^{19} M_e[a, a], \qquad I_{\text{others}}(e) = \frac{1}{19 \times 18} \sum_{a \ne b} M_e[a, b]$$
-     $$I_{\text{diff}}(e) = \big(I_{\text{self}}(e) - I_{\text{others}}(e)\big) \times 100$$
+     $$I_{\text{diff}}(e) = I_{\text{self}}(e) - I_{\text{others}}(e)$$
      Undefined (0/0) cells are skipped in these averages.
 
-  5. **Significance:** $I_{\text{diff}}$ and both accuracies are tested with the column permutation test of Phase 7, and $I_{\text{diff}}(e)$ with the same permutations, one element at a time. The element p-values are FDR-corrected across the elements of each feature (`q_elem`). The three global p-values are FDR-corrected across the 26 feature sets (`q_idiff`, `q_acc_forward`, `q_acc_backward`). Applied to the 27 Oct run, this leaves only f21 (theta weighted correlation) with a significant $I_{\text{diff}}$ ($q = 0.033$), down from 8 features with $p < 0.05$ before correction.
+  5. **Significance:** $I_{\text{diff}}$, both accuracies and their mean are tested with the column permutation test of Phase 7, and $I_{\text{diff}}(e)$ with the same permutations, one element at a time. Every element keeps the plain permutation p-value, including elements with $I_{\text{diff}}(e) \le 0$ (their p-values are large anyway); only an element that is $0/0$ in every comparison, with no $I_{\text{diff}}(e)$ at all, gets $p = 1$. A null value within $10^{-12}$ of the observed one counts as a tie (`PERM_TIE_TOL` in `config.py`): the observed $I_{\text{diff}}(e)$ and the null are summed in a different floating-point order, and without the tolerance a link kept in almost every binary network, whose true $I_{\text{diff}}(e)$ is exactly 0, could miss every tie by about $10^{-16}$ and get the smallest possible p-value. The element p-values are FDR-corrected across the elements of each feature (`q_elem`). The four global p-values are FDR-corrected across the 26 feature sets (`q_idiff`, `q_acc_forward`, `q_acc_backward`, `q_acc_mean`). Applied to the 27 Oct run (200,000 permutations), this left only f21 (theta weighted correlation) with a significant $I_{\text{diff}}$ ($q = 0.033$), down from 8 features with $p < 0.05$ before correction.
 
      **Where these are used later:** $I_{\text{diff}}(e)$ and its FDR-corrected q-value (from the element-wise permutation test, Phase 7) give the individuality axis and the quadrant classes of Phase 5a; they are reported for every element in Table T2 and drawn on the scalp maps of Figure 4. The element matrices $M_e$ are saved as `M_elem_{fid}.npy`.
 
@@ -521,7 +539,7 @@ flowchart TD
 Each element now has two scores: how universal it is and how individual it is. Plot every element in a two-dimensional space:
 
 * **X-axis:** overall universality, the average over the two sessions: $U(e) = \frac{U_1(e) + U_2(e)}{2}$, where $U_s(e) = \frac{1}{171} \sum_{a < b} J_{(a,s), (b,s)}(e)$ (Phase 2).
-* **Y-axis:** individuality, $I_{\text{diff}}(e) = \big(I_{\text{self}}(e) - I_{\text{others}}(e)\big) \times 100$ (Phase 4, item 4).
+* **Y-axis:** individuality, $I_{\text{diff}}(e) = I_{\text{self}}(e) - I_{\text{others}}(e)$ (Phase 4, item 4).
 
 **Each point is one element, so nothing has to be squeezed.** For a given element $e$, $U_1(e)$ is a single number: the average over the 171 infant pairs. Only across all elements does it form a list of $n$ numbers (19 or 171), one per element. The plot draws one point per element, at $x = U(e)$ and $y = I_{\text{diff}}(e)$, so a node feature gives 19 points and an edge feature 171.
 
@@ -616,15 +634,20 @@ What this shows:
    * Evaluated using the infant-level bootstrap (Phase 7), with FDR correction across elements.
    * **Full algorithm** (implemented in `02_compute_universality.py`):
      1. From Phase 2, take the two $19 \times 19$ similarity grids, one for `ses-1` and one for `ses-2` ($S_{(a,1),(b,1)}$ and $S_{(a,2),(b,2)}$), and compute $\Delta U = U_2 - U_1$.
-     2. **Paired infant bootstrap**, $B = 200{,}000$ resamples (random seed 999). In each resample, draw 19 infants with replacement and keep the pairs of drawn infants that are different infants ($d_p \ne d_q$). Average the `ses-1` grid over these pairs and the `ses-2` grid over **the same** pairs, and store the difference. Using the same pairs for both sessions is what makes the bootstrap "paired": both sessions are always compared on exactly the same infants.
+     2. **Paired infant bootstrap**, $B = 10{,}000$ resamples, the infant resamples shared by every bootstrap of the pipeline (Phase 7). In each resample, draw 19 infants with replacement and keep the pairs of drawn infants that are different infants ($d_p \ne d_q$). Average the `ses-1` grid over these pairs and the `ses-2` grid over **the same** pairs, and store the difference. Using the same pairs for both sessions is what makes the bootstrap "paired": both sessions are always compared on exactly the same infants.
      3. The 95% CI is the range between the 2.5th and 97.5th percentiles of the 200,000 differences; their median is also reported.
-     4. Two-sided p-value: twice the smaller of (the share of differences $\le 0$) and (the share $\ge 0$), never smaller than $1/B$. A small p means the change is consistently in one direction.
-     5. $\Delta U(e) = U_2(e) - U_1(e)$ for every element, and $\Delta u(a) = u_2(a) - u_1(a)$ for every infant, are computed and reported.
-   * **Not yet implemented:** the element-level test. The specification asks for $\Delta U(e)$ to be tested with the infant bootstrap and FDR-corrected across elements, but the code currently reports $\Delta U(e)$ without a test, so element-level changes have no p- or q-values yet (Section 8).
+     4. Two-sided p-value: twice the smaller of (the share of differences $\le 0$) and (the share $\ge 0$), never smaller than $1/B$ and at most 1. A small p means the change is consistently in one direction.
+     5. **Element level:** $\Delta U(e) = U_2(e) - U_1(e)$ is bootstrapped in the same way, one element at a time and in the same resamples: in each resample, $U_1(e)$ and $U_2(e)$ are averaged over the same drawn pairs and the difference is kept. Each element gets a 95% CI and a two-sided p-value, and the p-values are FDR-corrected across the elements of each feature (`delta_U_elem_ci_95`, `delta_U_elem_p`, `delta_U_elem_q`; Table T2).
+     6. $\Delta u(a) = u_2(a) - u_1(a)$ is computed and reported for every infant. Its average over the 19 infants equals $\Delta U$.
+     7. In `06_developmental_and_twins.py`, the $\Delta U$ p-values are FDR-corrected across the 26 feature sets (`q_value`). Applied to the 27 Oct run (200,000 resamples), 7 of the 11 features with $p < 0.05$ stayed significant.
+   * **Age-spread caveat.** Ages are more spread out at `ses-2` than at `ses-1`, so infants at `ses-2` differ more in age, which by itself could lower $U_2$. The mean age difference over the 171 pairs is therefore reported next to $\Delta U$ (`mean_abs_dage_days`): **21.3 days at `ses-1` and 23.8 days at `ses-2`**. Read $\Delta U$ together with the Mantel test (item 3), which shows whether similarity actually falls with age difference.
 2. **Decay with inter-session gap:** does self-similarity fade as more time passes between the visits?
    * Compute the Spearman correlation $\rho$ between self-similarity $M[a, a]$ and the inter-session time gap (in days), across the 19 infants. Spearman correlation works on ranks: it measures whether one quantity consistently rises (or falls) as the other rises. A negative $\rho$ here would mean that self-similarity decays as the gap grows.
-   * Compute the Spearman correlation between $i_{\text{diff}}(a)$ and the time gap. $i_{\text{diff}}(a)$ is infant $a$'s own differential identifiability: their self-similarity $M[a, a]$ minus their average similarity to the other infants (the other cells in row $a$ and column $a$ of $M$), multiplied by 100.
+   * Compute the Spearman correlation between $i_{\text{diff}}(a)$ and the time gap. $i_{\text{diff}}(a)$ is infant $a$'s own differential identifiability: their self-similarity $M[a, a]$ minus their average similarity to the other infants (the other cells in row $a$ and column $a$ of $M$), in Jaccard units.
+   * Repeat both correlations with each infant's age at `ses-1` in place of the time gap (`self_vs_age1`, `idiff_vs_age1`).
    * Null model: 200,000 permutations of the interval vector, i.e. randomly reassigning which time gap belongs to which infant. The p-value is two-sided: it counts the shuffles whose $\lvert \rho \rvert$ is at least as large as the real $\lvert \rho \rvert$. Repeating this with 50,000, 100,000 and 2,000,000 permutations, and intermediate values, is planned (Section 8).
+   * **Confidence interval** (Step 7.5): each $\rho$ gets a 95% CI from the ordinary infant bootstrap. In each resample the same 19 drawn infants supply both variables, and $\rho$ is recomputed (an infant drawn twice appears twice).
+   * Each of the four correlations is FDR-corrected across the 26 feature sets (a `q` next to each `p`). The four correlations with their CIs, p and q, and the values of the two infants below, are in Table T1b.
    * Specific reporting: highlight the short-gap test-retest infant `sub-NORB00064` (recorded twice only 4 days apart, so there is almost no development in between) and the intermediate infant `sub-NORB00069` (42 days).
 3. **Age discrepancy vs. network similarity (Mantel test):** are infants who are closer in age also more similar in their networks?
    * Matrix 1: the $19 \times 19$ similarity matrix $S_{(a, s), (b, s)}$ between infants within one session. Yes, it is infant × infant for one particular session; the test is run separately for `ses-1` and `ses-2`. It is **symmetric** ($S[a, b] = S[b, a]$, because comparing $a$ with $b$ is the same as comparing $b$ with $a$), and its diagonal is empty, because an infant is not compared with itself within a session.
@@ -632,11 +655,22 @@ What this shows:
    * Because both matrices are symmetric, only one triangle carries information, which is why only the upper triangle is used below.
    * Statistic: the Spearman rank correlation $\rho$ across the 171 upper-triangle elements, i.e. the cells above the diagonal, which cover each pair of infants once.
    * Null model: 200,000 simultaneous row/column infant permutations of matrix $D$: shuffle which infant is which in $D$, moving rows and columns together, so that $D$ stays a valid age-difference table while any link to $S$ is broken. The p-value is two-sided (shuffles with $\lvert \rho \rvert$ at least as large as the real one). Repeating this with 50,000, 100,000 and 2,000,000 permutations, and intermediate values, is planned (Section 8).
-4. **Twin / sibling pair analysis (`sub-NORB00086` & `sub-NORB00087`, Table T6):** are the twins more alike than unrelated infants? Below, "86" and "87" are short for the two twins.
-   * Percentile rank of the twins' similarity $S_{(86, s), (87, s)}$ among all 171 pairs. For example, the 99th percentile would mean the twins are more similar than 99% of pairs.
-   * Rank against matched control pairs: pairs involving either twin, and non-twin pairs whose ages differ by at most 7 days ($|\Delta\text{age}| \le 7$ days).
-   * Cross-session cross-identification: look at $M[86, 87]$ and $M[87, 86]$ to see whether twin A is misidentified as twin B, i.e. whether one twin's first-visit recording looks more like the other twin's second-visit recording than like their own.
-   * Shared elements: elements where the twins' similarity exceeds the 95th percentile of non-sibling pairs, i.e. where the twins are more alike than 95% of unrelated pairs.
+   * **Confidence interval** (Step 7.5): $\rho$ is a pair statistic, so its 95% CI comes from the infant pair bootstrap. In each resample, $\rho$ is recomputed over all pairs of drawn positions holding different infants ($d_p \ne d_q$), with $S$ and $D$ read for the infants drawn. The CI is in Table T1.
+   * The Mantel p-values of each session are FDR-corrected across the 26 feature sets (`q`). In the 27 Oct run no feature reaches $p < 0.05$ at either session, so similarity does not measurably fall with age difference.
+4. **Twin / sibling pair analysis (`sub-NORB00086` & `sub-NORB00087`, Table T6):** are the twins more alike than unrelated infants? Below, "86" and "87" are short for the two twins. With only one pair, every result is a descriptive rank, not a significance test. Items (a)–(c) are run at recording level and again for every element.
+   * **(a) Rank among all pairs.** Percentile rank of the twins' similarity $S_{(86, s), (87, s)}$ among all 171 pairs. For example, the 99th percentile would mean the twins are more similar than 99% of pairs.
+   * **(b) Rank against matched control pairs**, which rule out two other explanations for a high twin similarity:
+     * the 34 other pairs involving either twin (36 with 20 infants), which control for each twin's general similarity to everyone;
+     * the non-twin pairs whose ages differ by at most 7 days ($|\Delta\text{age}| \le 7$ days) at that session: 78 pairs at `ses-1` and 37 at `ses-2`. These control for the twins being the same age.
+
+     For each set, the twins' value, the set's size, median and range (minimum to maximum), and the twins' percentile rank are reported.
+   * **(c) Cross-session cross-identification.** $M[86, 87]$ and $M[87, 86]$ are reported next to $M[86, 86]$ and $M[87, 87]$, with the rank of each twin value within its row and its column (1 = highest). A twin is "identified" as the other if the other twin holds the single highest value:
+     * in their row: their first-visit recording looks most like the other twin's second-visit recording (forward, `ses-1` $\to$ `ses-2`);
+     * or in their column: their second-visit recording looks most like the other twin's first-visit recording (backward).
+
+     A tie for the highest value counts as no identification, as in Phase 4. `misidentified_86_as_87` is true if either direction holds, and the `_fwd` and `_bwd` flags say which. In the 27 Oct results this happens only for f24 (alpha binary adjacency), where 86's first-visit recording is identified as 87 (forward). At element level, `n_elements_misidentified` counts the elements where either twin is identified as the other. With 19 infants and four checks per element, about one element in five is expected by chance, so these counts are not by themselves evidence of a twin effect.
+   * **(d) Shared elements.** Elements where the twins' similarity exceeds the 95th percentile of non-sibling pairs at **both** sessions, i.e. where the twins are more alike than 95% of unrelated pairs. Each shared element is listed with its Phase 5a class, and the number that are "individual" (class Individual or Universal and Individual, i.e. with significant $I_{\text{diff}}(e)$) is reported. This reads `taxonomy_results.json`, so Phase 5 must run before Phase 6. In the 27 Oct results none of the shared elements is individual.
+   * **(e) Same-day control.** The specification asks whether the twins were recorded on the same day, and if so to compare them with other pairs recorded on a common day. This cannot be determined from the dataset: `scans.tsv` has no acquisition date, and every EDF file shows the anonymised date 2023-01-01. The code records this note in each feature's results (`same_day_control`).
 
    > **Status:** the twin analysis is to be treated as a special case study. If the results come out clear and presentable, it may get a separate section or subsection of its own.
 
@@ -650,72 +684,81 @@ These are the rules for deciding whether a result is real or could be due to cha
 | :--- | :--- |
 | **Pair non-independence** | Never treat the 171 pairs as 171 independent samples! Each infant appears in 18 different pairs, so the pairs share information. Treating them as independent would make results look more certain than they really are. |
 | **Resampling unit** | Always resample or permute **infants** ($N = 19$), never pairs. |
-| **Bootstrap** | $B = 200{,}000$ infant resamples → percentile 95% confidence interval, taken between the 2.5th and 97.5th percentiles. |
-| **Permutation tests** | 200,000 permutations → exact $p = (1 + \text{count}(\text{null} \ge \text{obs})) / (1 + 200{,}000)$, where "obs" is the observed (real) result and "null" are the results from shuffled data. |
+| **Bootstrap** | $B = 10{,}000$ infant resamples → percentile 95% confidence interval, taken between the 2.5th and 97.5th percentiles. |
+| **Permutation tests** | 200,000 permutations → exact $p = (1 + \text{count}(\text{null} \ge \text{obs} - 10^{-12})) / (1 + 200{,}000)$, where "obs" is the observed (real) result and "null" are the results from shuffled data. The $10^{-12}$ tolerance (`PERM_TIE_TOL`) makes a floating-point tie count as at least as extreme. |
 | **Multiple testing** | Benjamini–Hochberg FDR at $q < 0.05$, across elements and feature sets. |
 
 1. **Infant-level bootstrap (200,000 resamples):** "what if we had happened to recruit a slightly different group of infants?" Each resample picks 19 infants at random from the 19, *with replacement* (so some infants appear twice and others not at all), and recomputes the statistic. After 200,000 resamples, sort the results: the middle 95% (between the 2.5th and the 97.5th percentile) is the 95% confidence interval.
-   * For pair statistics ($U_1, U_2, \Delta U, I_{\text{others}}$): draw 19 infant indices $d_1, \dots, d_{19}$ with replacement, and evaluate only the pairs where $d_p \ne d_q$ (here $p$ and $q$ are positions in the draw). If the same infant was drawn twice, the pair formed by that infant and its own copy is skipped, because it would be a self-comparison.
-   * For infant-level metrics ($I_{\text{self}}, W_s$): an ordinary bootstrap over the 19 values, one per infant: resample those 19 numbers with replacement and average them.
-   * Paired differences (for example weighted vs. binary, or within- vs. between-region): both quantities are evaluated within the same bootstrap resample, so they are always compared on exactly the same infants.
+   * For pair statistics ($U_1, U_2, U_s(g), \Delta U, \Delta U(e), I_{\text{others}}$, Mantel $\rho$): draw 19 infant indices $d_1, \dots, d_{19}$ with replacement, and evaluate only the pairs where $d_p \ne d_q$ (here $p$ and $q$ are positions in the draw). If the same infant was drawn twice, the pair formed by that infant and its own copy is skipped, because it would be a self-comparison.
+   * For infant-level metrics ($I_{\text{self}}, W_s, O_s$, $W_s - O_s$ and $W_s(e) - O_s(e)$, and the interval and age correlations): an ordinary bootstrap over the 19 values, one per infant: resample those 19 numbers with replacement and average them (or recompute the correlation).
+   * Paired differences (for example `ses-2` vs. `ses-1`, weighted vs. binary, or within- vs. between-region): both quantities are evaluated within the same bootstrap resample, so they are always compared on exactly the same infants. The p-value is two-sided: twice the smaller of the share of resampled differences $\le 0$ and the share $\ge 0$, at least $1/B$ and at most 1. Every bootstrap test in the pipeline uses this p-value.
 2. **Permutation null tests (200,000 iterations):** "what would we see if infant identity didn't matter?"
    * Identifiability null: randomly permute the columns of $M$ (the `ses-2` labels), i.e. randomly reassign which second-visit recording belongs to which infant, and recompute $I_{\text{diff}}$ and the identification accuracy each time. This gives their null distributions.
    * Element-wise identifiability: apply the same column permutation to all the element matrices $M_e$ at once. This preserves spatial covariance: elements that naturally behave alike (for example neighbouring electrodes) still behave alike in the shuffled data, so the element tests stay realistic.
 
-**Implementation details, phase by phase.** All random draws use fixed seeds, so results reproduce exactly when the same settings are used. In each resample, an infant drawn more than once counts each time it is drawn.
+**Implementation details, phase by phase.** Every random draw comes from the one seed `SEED = 42` in `config.py` (Step 0, item 8), which each results file records, so results reproduce exactly when the same settings are used. The $B$ infant resamples are drawn once from that seed (`utils.bootstrap_draws`), and every bootstrap of every phase and feature uses these same resamples, so any two quantities can be compared as a paired difference. In each resample, an infant drawn more than once counts each time it is drawn. Bootstrap means are computed as weighted means: infant $a$ weighted by the number of times it was drawn, $c_a$, and a pair $(a, b)$ by $c_a c_b$, which is exactly the average over all position pairs with $d_p \ne d_q$ (checked against the loop of the specification).
 
 | Where | Procedure | Exact technical details |
 | :--- | :--- | :--- |
-| Phase 2, $U_1$ and $U_2$ | Pair bootstrap on the $19 \times 19$ grid $S$ | Per resample: average $S$ over the drawn pairs with $d_p \ne d_q$. Reported: median, 95% percentile CI, SD of the resamples. Seed $42 + $ session. |
-| Phase 2, $U_s(e)$ and $U_s$ | Element-shuffle permutation test | For each pair, shuffle infant $b$'s element labels (same shuffle for its 12 windows, a new shuffle for each pair); recompute $U_s(e)$ (epochs averaged first, then pairs, as for the real value) and $U_s$. One-sided $p = (1 + \text{count}(\text{null} \ge \text{obs}))/(1 + B)$. An element with no defined real value gets $p = 1$. The shuffles are split across `--workers` processes, each with its own seed ($1000 + 37 \times$ worker number), so the exact p-values depend on the number of workers. |
-| Phase 2, $\Delta U$ | Paired pair-bootstrap | See Phase 6, item 1. Seed 999. |
-| Phase 3, $W_s$, $O_s$, $W_s - O_s$ | Ordinary bootstrap of the 19 per-infant values | Per resample: the mean of 19 values drawn with replacement. One-sided p for $W_s(a) - O_s(a) > 0$: the share of resampled means $\le 0$, never below $1/B$. Seeds 100–500 $+$ session. |
-| Phase 4, $I_{\text{self}}$, $I_{\text{others}}$, $I_{\text{diff}}$ | Infant bootstrap of $M$ | Per resample: $I_{\text{self}}$ = mean of $M[d, d]$ over the drawn infants; $I_{\text{others}}$ = mean of $M[d_p, d_q]$ over off-diagonal positions with $d_p \ne d_q$; $I_{\text{diff}}$ from these two. 95% percentile CIs for all three. Seed 42, the same as the permutation test, so every feature uses the same infant resamples. |
-| Phase 4, $I_{\text{diff}}$, accuracy, $I_{\text{diff}}(e)$ | Column permutation of $M$ | Per permutation: shuffle the 19 columns; recompute $I_{\text{diff}}$, the forward and backward accuracy (ties count as wrong) and every $I_{\text{diff}}(e)$ with the same shuffle. One-sided p as above. Elements with $I_{\text{diff}}(e) \le 0$ or undefined get $p = 1$, since they cannot show "more like oneself". Seed 42. |
-| Phase 6, Spearman and Mantel | Permutation of gaps / infant labels | Two-sided p: count of $\lvert \rho_{\text{null}} \rvert \ge \lvert \rho_{\text{obs}} \rvert$. |
-| Phases 2 and 4, elements | Benjamini–Hochberg FDR | Applied across the elements **of each feature separately**, at $q < 0.05$. |
-| Phase 4, global tests | Benjamini–Hochberg FDR | The p-values of $I_{\text{diff}}$, forward accuracy and backward accuracy are each corrected across the 26 feature sets, at $q < 0.05$ (`q_idiff`, `q_acc_forward`, `q_acc_backward`). The global tests of Phases 2 and 3 are not yet corrected across feature sets (Section 8). |
+| Phase 2, $U_1$ and $U_2$ | Pair bootstrap on the $19 \times 19$ grid $S$ | Per resample: average $S$ over the drawn pairs with $d_p \ne d_q$. Reported: median, 95% percentile CI, SD of the resamples. |
+| Phase 2, $U_s(g)$ | Pair bootstrap of the pairs × regions matrix | Per resample: average each column of `J_region` over the drawn pairs. Reported: median and 95% percentile CI (Table T2b). |
+| Phase 2, $U_s(e)$ and $U_s$ | Element-shuffle permutation test | For each pair, shuffle infant $b$'s element labels (same shuffle for its 12 windows, a new shuffle for each pair); recompute $U_s(e)$ (epochs averaged first, then pairs, as for the real value) and $U_s$. One-sided $p = (1 + \text{count}(\text{null} \ge \text{obs}))/(1 + B)$. An element with no defined real value gets $p = 1$. The shuffles run in blocks of 500, each with its own child seed spawned from the recorded seed (`numpy.random.SeedSequence`), so the p-values do not depend on the number of workers. |
+| Phase 2, $\Delta U$ and $\Delta U(e)$ | Paired pair-bootstrap | See Phase 6, item 1: two-sided p, and for $\Delta U(e)$ FDR across elements. |
+| Phase 3, $W_s$, $O_s$, $W_s - O_s$ | Ordinary bootstrap of the 19 per-infant values | Per resample: the mean of 19 values drawn with replacement. Two-sided p for $W_s(a) - O_s(a)$ against 0, and for every element $W_s(a, e) - O_s(a, e)$ (FDR across elements). The same for the odd/even split. |
+| Phase 4, $I_{\text{self}}$, $I_{\text{others}}$, $I_{\text{diff}}$ | Infant bootstrap of $M$ | Per resample: $I_{\text{self}}$ = mean of $M[d, d]$ over the drawn infants; $I_{\text{others}}$ = mean of $M[d_p, d_q]$ over off-diagonal positions with $d_p \ne d_q$; $I_{\text{diff}}$ from these two. Median and 95% percentile CI for all three. |
+| Phase 4, $I_{\text{diff}}$, accuracy, $I_{\text{diff}}(e)$ | Column permutation of $M$ | Per permutation: shuffle the 19 columns; recompute $I_{\text{diff}}$, the forward and backward accuracy (ties count as wrong), their mean and every $I_{\text{diff}}(e)$ with the same shuffle. One-sided p as above. Only an element with no defined $I_{\text{diff}}(e)$ gets $p = 1$. Every feature uses the same sequence of shuffles. |
+| Phase 6, Spearman and Mantel | Permutation of gaps / infant labels | Two-sided p: count of $\lvert \rho_{\text{null}} \rvert \ge \lvert \rho_{\text{obs}} \rvert$. Every test and feature uses the same sequence of shuffles. |
+| Phase 6, CIs of $\rho$ | Infant bootstrap | Mantel $\rho$: pair bootstrap ($\rho$ over the drawn pairs with $d_p \ne d_q$). The four interval and age correlations: ordinary bootstrap of the 19 infants. 95% percentile CIs. |
+| Phases 2, 3 and 4, elements | Benjamini–Hochberg FDR | Applied across the elements **of each feature separately**, at $q < 0.05$. |
+| Phase 4, global tests | Benjamini–Hochberg FDR | The p-values of $I_{\text{diff}}$, forward, backward and mean accuracy are each corrected across the 26 feature sets, at $q < 0.05$ (`q_idiff`, `q_acc_forward`, `q_acc_backward`, `q_acc_mean`). Table T1 also corrects the global tests of Phases 2 and 3 across the feature sets. |
+| Phase 6, global tests | Benjamini–Hochberg FDR | The $\Delta U$ p-value, both Mantel tests and the four interval correlations are each corrected across the 26 feature sets, at $q < 0.05$. |
 
-The number of permutations and of bootstrap resamples ($B$) is set by `--permutations` in `run_full_analysis.py` (default 200,000) and is the same for Phases 2, 3, 4 and 6.
+The number of permutations and of bootstrap resamples ($B$) is `N_PERMUTATIONS` in `config.py`: $B = 200{,}000$, used for every reported result (Steps 7.2 and 7.3 of the plan specify 10,000). `--permutations` in `run_full_analysis.py` overrides it for Phases 2, 3, 4 and 6, and `--robustness-permutations` for Phase 7.
 
 ---
 
 ### Phase 8: Robustness & Sensitivity Checks (Step 8 — Table T4)
 
-To make sure the conclusions are not artifacts of hyperparameter choices (settings that could reasonably have been chosen differently), the main results ($U_1, U_2, I_{\text{diff}}$, accuracy and the taxonomy counts) are re-run under 9 alternative choices. If the conclusions hold every time, they don't depend on those choices.
+To make sure the conclusions are not artifacts of hyperparameter choices (settings that could reasonably have been chosen differently), the main results are re-run under 9 alternative choices, one change at a time; everything else stays as in Phases 2–5. If the conclusions hold every time, they don't depend on those choices.
 
-Each check is run on a subset of features and compared with that feature's main result (the "baseline"), using $U_1$ (`ses-1` only) and, for most checks, $I_{\text{diff}}$. Both are recomputed in the same way as in Phases 2 and 4, with the change described.
+**What every check reports.** For checks 1–8 and every feature listed, the code reruns the full set of main results: $U_1$ and $U_2$ (Phase 2), $I_{\text{diff}}$ and the forward, backward and mean identification accuracy (Phase 4), and the Phase 5a class counts (Universal, Individual, Universal and Individual, Neither). Table T4 has one row per check and feature, with the baseline value, the value under the check and the change for each metric, a flag saying whether $I_{\text{diff}}$ kept its sign, and the class counts under both. The table states facts only; there are no pre-written verdicts. Check 9 asks a different question and has its own table, T4b.
 
-1. **$0/0$ replacement:** set $0/0 \to 0$ (count joint absences as complete disagreement) instead of excluding them as `NaN`. Features: f01, f02, f03, f10, f11, f12, f19, f20. Together with the main analysis, this means both rules are run, so their results can be compared directly (as the histograms already suggested).
-2. **Combinatorial epoch pairing:** average over all $12 \times 12 = 144$ epoch combinations instead of the matched (diagonal) pairs $(k, k)$. Features: f01, f04, f05, f06, f10, f13, f19, f21. In detail:
-   * For each pair of recordings, compute $S^{(k_1, k_2)}$ for every window $k_1$ of the first recording with every window $k_2$ of the second ($k_1, k_2 = 1, \dots, 12$), i.e. 144 scores instead of 12. If both windows are entirely zero, that score is set to 0.
-   * Average the 144 scores to get the similarity of the two recordings.
-   * $U_1$: do this for all 171 infant pairs in `ses-1` and average. $I_{\text{diff}}$: build the $19 \times 19$ matrix $M$ from 144-pair averages (`ses-1` rows, `ses-2` columns) and compute $I_{\text{self}}$, $I_{\text{others}}$ and $I_{\text{diff}}$ as in Phase 4.
-   * Reported: the change from baseline, and whether $I_{\text{diff}}$ keeps its sign ("direction preserved" or "inverted").
-   * Why it matters: windows have no natural correspondence between different recordings, so matching window $k$ with window $k$ is arbitrary; using all combinations removes that choice.
-3. **Epoch window length:** truncate to $K = 6$ epochs instead of $K = 12$, i.e. use only the first 6 windows of each recording. Features: f01, f04, f05, f06, f10, f13, f19, f21.
-4. **Twin exclusion:** recompute with $N = 17$ infants, leaving out the twin pair `sub-NORB00086` and `sub-NORB00087`, whose similarity could be due to being twins. Features: f01, f04, f05, f06, f07, f10, f12, f13, f19, f21.
-5. **Pattern-only normalization:** divide each epoch's values by their $L_1$ sum (their total), so that they add up to 1 ($\sum_e x(e) = 1$). This removes overall shifts in level ("global amplitude shifts"), so the comparison depends only on the pattern across elements, before Jaccard is computed. *Example:* $[2, 4, 4]$ becomes $[0.2, 0.4, 0.4]$. An epoch whose values are all 0 stays at 0. Features: f01, f04, f05, f06, f07, f19, f21.
-6. **Reference montage:** EEG voltages are always measured relative to a reference point. Re-reference the continuous EEG to the average reference (subtract the average of all electrodes at each moment) before computing the correlation matrices.
-   * **How it is done in the code:** for every infant and session, the raw EDF is loaded (19 electrodes, with the recording system's 0.5–30 Hz filtering and no further filter), and the same 12 annotated windows are cut out. At every time sample the mean of the 19 electrodes is subtracted from each electrode. Then $\lvert r_{ij} \rvert$ is computed for the 171 electrode pairs. Because the average reference is applied sample by sample, doing it per window gives exactly the same result as doing it on the continuous recording; it matches MNE's `set_eeg_reference("average")` [6], although the code does the subtraction by hand. Only the broadband weighted correlation (f01) is tested, against the f01 baseline.
+**How it is implemented** (`07_robustness_checks.py`):
+
+* **One function for every condition.** `main_results` takes a feature tensor of shape (infants, 2 sessions, $K$ epochs, elements) and computes all the metrics above, so every check runs exactly the same code; a check only changes the tensor or one setting (the 0/0 rule or the epoch pairing).
+* **The baseline is recomputed with the same code.** Its $U_1$, $U_2$, $I_{\text{diff}}$, accuracy, $U_s(e)$ and $I_{\text{diff}}(e)$ reproduce Phases 2 and 4 exactly; the code checks this on every run and prints the largest difference (0 in the test run).
+* **Permutations.** The class counts need the element-level tests: the element-shuffle null of Phase 2 for $U_s(e)$ and the column permutation of Phase 4 for $I_{\text{diff}}(e)$, each followed by FDR correction across elements. Each check uses `--robustness-permutations` permutations (default 200,000, the same as the main analysis), with the recorded seed. The baseline uses the same number and the same shuffles, so class counts are compared like with like. Its shuffles are drawn differently from those of Phases 2 and 4, so its class counts can differ slightly from Phase 5's.
+* **A faster element-shuffle null.** For each pair of infants the code first computes a table $G[e, e']$: the similarity between infant $a$'s element $e$ and infant $b$'s element $e'$, averaged over the epoch pairs. Shuffling $b$'s element labels then only means reading $G[e, \pi(e)]$, instead of recomputing every Jaccard score. This gives exactly the same null values as the Phase 2 code (checked with identical shuffles), but takes seconds instead of minutes.
+* **Speed.** All 200 condition × feature runs are spread over `--workers` processes; the full phase took about 10 minutes with 8 workers.
+
+The checks:
+
+1. **$0/0$ rule:** set $0/0 \to 0$ (count joint absences as complete disagreement) instead of excluding them as `NaN`, for $J$ and for the recording-level $S$. All 26 features. At recording level a $0/0$ window pair occurs only twice, in $M$ of f02 (Section 4.1), so $U_1$, $U_2$, $I_{\text{diff}}$ and accuracy can change only there; the element-level values, and so the class counts, can change for every feature that contains zeros.
+2. **Epoch pairing:** average $J$ and $S$ over all $12 \times 12 = 144$ epoch combinations $(k_1, k_2)$ instead of the matched pairs $(k, k)$, for every comparison (the 171 within-session pairs and the $19 \times 19$ matrix $M$). All 26 features. Why it matters: windows have no natural correspondence between different recordings, so matching window $k$ with window $k$ is arbitrary; using all combinations removes that choice.
+3. **Number of epochs:** $K = 6$, using only the first 6 windows of each recording, instead of $K = 12$. All 26 features.
+4. **Twin exclusion:** recompute with $N = 17$ infants, leaving out the twin pair `sub-NORB00086` and `sub-NORB00087`, whose similarity could be due to being twins. All 26 features.
+5. **Pattern only:** divide each epoch's values by their sum, so that they add up to 1 ($\sum_e x(e) = 1$). This removes overall differences in level, so the comparison depends only on the pattern across elements. *Example:* $[2, 4, 4]$ becomes $[0.2, 0.4, 0.4]$. An epoch whose values are all 0 stays at 0. All 26 features, at recording level only (as the specification says), so there are no class counts for this check.
+6. **Average reference:** EEG voltages are always measured relative to a reference point. The continuous EEG is re-referenced to the average of the 19 electrodes with MNE's `raw.set_eeg_reference("average")` [6], and then **all 26 features are rebuilt** exactly as in Phase 1: $\lvert r \rvert$ of the 12 unfiltered windows and the 18 broadband network measures (f01–f18), and the four band-filtered correlations and adjacencies (f19–f26, filtering the whole recording before cutting windows).
+   * **Check of the rebuild:** run without re-referencing, the same code reproduces all 26 saved feature tensors to within $4 \times 10^{-14}$, so the only difference under this check is the reference.
    * **Literature:** the average reference approximates a neutral, reference-free recording when the electrodes cover the head densely and evenly [1]. With only 19 electrodes that approximation is rough [2], and the reference electrode standardization technique (REST) has been proposed as an alternative [3]. Re-referencing also changes the correlations between channels and makes them linearly dependent: the 19 re-referenced signals sum to zero at every moment.
-   * **Status:** this is a sensitive step that needs literature backing. The implementation and its interpretation are to be reviewed carefully before the results are used (Section 8).
-7. **Volume conduction control:** electrical activity spreads through the head, so one brain source can appear at several nearby electrodes at the same instant and make them look connected when they are not. Compute the debiased weighted phase lag index (dwPLI) with MNE Connectivity instead of Pearson $|r|$; dwPLI ignores perfectly simultaneous (zero-lag) coupling, which is what volume conduction produces [4].
-   * **The standard method** [4, 5]: dwPLI is estimated from the cross-spectra of many epochs (trials) at each frequency, and then averaged over a frequency band. In MNE-Connectivity this is `mne_connectivity.spectral_connectivity_epochs(..., method="wpli2_debiased")`, which returns the debiased *squared* wPLI.
-   * **What the code currently does:** it does **not** call MNE-Connectivity. For each 2.56-second window separately, it takes the Hilbert transform of the broadband signal of every electrode, forms the imaginary part of the cross-signal of each electrode pair at every time sample, applies the debiased wPLI² formula of [4] across the **time samples of that one window**, clips negative values to 0, and takes the square root. It is compared with the f01 baseline.
-   * **Differences from the standard method:** (i) no MNE-Connectivity; (ii) it averages over time samples within one window instead of over epochs; (iii) it is not frequency-resolved (one broadband value); (iv) it reports the square root of the debiased wPLI², not wPLI² itself.
-   * **Status: ⚠️ does not yet follow the MNE-Connectivity documentation.** This check must be re-implemented with `spectral_connectivity_epochs` exactly as documented [5], and cited, before its results are used (Section 8).
-8. **Fixed-density binarization:** replace GCC thresholding with fixed top-$m$ edge thresholding: keep the $m$ strongest links in every window, where $m$ is the median GCC edge count (58 links in this data). In full:
-   * Start from the broadband weighted correlations (f01): the 171 values $\lvert r_{ij} \rvert$ of each window, separately for every infant, session and window.
-   * Find the 58th-largest value of that window and keep every link at or above it ($A_{ij} = 1$); all others get $A_{ij} = 0$. This keeps exactly 58 links, or more only if several links share exactly the threshold value, which practically never happens with continuous correlations.
-   * $m = 58$ is fixed in the code. It is the median number of links kept by GCC thresholding of the broadband networks (`metadata.json`).
-   * Unlike GCC thresholding, nothing guarantees that all 19 electrodes stay connected; a window's network may fall apart into pieces.
-   * $U_1$ and $I_{\text{diff}}$ are computed from these binary networks and compared with the GCC-based binary feature (f10).
-9. **Physical distance regression:** electrodes that are physically close tend to have more similar signals. Regress the Euclidean (straight-line) 3D distance between electrodes out of the edge centralities, i.e. remove the part of each edge's value that distance alone can predict, and re-evaluate universality on what is left (the distance-adjusted residuals). In detail:
-   * The 3D electrode positions are read from one infant's electrode file (`sub-NORB00001_ses-1_electrodes.tsv`), assuming the same standard positions for everyone, and the 171 distances between electrode pairs are computed.
-   * For each window separately, a least-squares straight line, value $\approx$ intercept $+$ slope $\times$ distance, is fitted across the 171 edges, and its prediction is subtracted from each edge's value (the residual).
-   * Residuals can be negative, but the Jaccard score needs non-negative values, so each window's residuals are shifted up so that the smallest becomes 0.01. Because the Jaccard score is not unaffected by such shifts and the shift differs between windows, the size of the shift can influence the result.
-   * Features: f01, f05, f19, f21. $U_1$ and $I_{\text{diff}}$ are recomputed from the adjusted values and compared with the baseline.
+   * **Status:** this is a sensitive step that needs literature backing. The interpretation is to be reviewed carefully before the results are used (Section 8).
+7. **Volume conduction:** electrical activity spreads through the head, so one brain source can appear at several nearby electrodes at the same instant and make them look connected when they are not. The debiased weighted phase lag index ignores perfectly simultaneous (zero-lag) coupling, which is what volume conduction produces [4].
+   * **How it is done:** `mne_connectivity.spectral_connectivity_epochs(..., method="wpli2_debiased", faverage=True)` [5], which estimates the debiased squared wPLI from the cross-spectra of the 12 windows of a recording and averages it over the band. Negative values are set to 0. Each window is cut to its first 2.56 s, because the method needs windows of equal length.
+   * **Features:** the weighted edge weights only, per band: delta (f19), theta (f21), alpha (f23) and beta (f25), and broadband (f01) over 0.5–30 Hz, the range the four bands cover together. Each is compared with the matching $\lvert r \rvert$ feature.
+   * **One network per recording.** Because dwPLI is estimated *across* the 12 windows, each recording gives one network instead of 12, so this check is computed with $K = 1$.
+   * **Lowest frequencies:** MNE-Connectivity only estimates frequencies with at least 5 cycles in a window, i.e. from about 2 Hz for 2.56-second windows, so the delta band effectively covers about 2–4 Hz.
+8. **Fixed-density binarisation:** keep the $m$ strongest links in every window instead of using the GCC rule, where $m$ is the median number of links the GCC rule keeps (Step 0). $m$ is computed from the data for each network: 58 (broadband), 59 (delta), 57 (theta), 49 (alpha) and 50 (beta). All 13 binary features are rebuilt from these networks: the 9 broadband binary measures (f10–f18), from the broadband $\lvert r \rvert$ (f01), and the four band adjacencies (f20, f22, f24, f26), from their band correlations. Exactly $m$ links are kept; unlike the GCC rule, nothing guarantees that all 19 electrodes stay connected. With $m$ set to a window's own GCC edge count, the code reproduces that window's GCC network exactly.
+9. **Electrode distance:** electrodes that are physically close tend to have more similar signals. For every edge feature (18 features), using the baseline results:
+   * the Spearman correlation $\rho$ of $U(e) = \frac{U_1(e) + U_2(e)}{2}$ with the 3D distance between the two electrodes, and of $I_{\text{diff}}(e)$ with distance;
+   * the within- minus between-region difference of $U(e)$ (the mean over edges joining two electrodes of the same region, minus the mean over the other edges), first on $U(e)$ itself and then on its residuals after a straight-line regression on distance. If within-region edges are more universal only because they are shorter, the difference disappears on the residuals.
+   * Uncertainty: every quantity is recomputed in each of the infant bootstrap resamples (Phase 7), giving a 95% CI and a two-sided p; the p-values of each test are FDR-corrected across the 18 edge features.
+   * The 3D electrode positions are read from one infant's electrode file (`sub-NORB00001_ses-1_electrodes.tsv`), assuming the same standard positions for everyone.
+
+**Results of the test run** (1 Nov 2026, 10,000 permutations, current feature tensors; the official tables update with the next full run):
+
+* **$I_{\text{diff}}$ keeps its sign** in 26 of 26 features under the $0/0$ rule, 25 of 26 under all-pairs epoch pairing, twin exclusion, pattern only and the average reference, and 12 of 13 under fixed-density binarisation. With $K = 6$ it flips in 5 of 26 features, all of them with a small baseline (at most 0.0084).
+* **dwPLI changes the most:** $U_1$ roughly halves (f01: 0.61 to 0.35; bands: about 0.60 to 0.20–0.31), and the theta $I_{\text{diff}}$ turns negative.
+* **Universality falls with distance:** $\rho(U(e), \text{distance})$ is between $-0.72$ and $-0.87$ for 16 of the 18 edge features. Within-region edges are significantly more universal than between-region edges in 17 of 18 features (not f09, weighted edge closeness), and the difference is significant on the distance residuals in all 18 ($q < 0.05$), so it is not explained by distance alone. $I_{\text{diff}}(e)$ is not significantly related to distance in any feature after FDR correction.
 
 ---
 
@@ -723,24 +766,41 @@ Each check is run on a subset of features and compared with that feature's main 
 
 ### 6.1 Tables
 
-* **Table T1 (Global Summary):** 26 rows, one per feature set. Columns: $U_1, U_2, \Delta U, W_1, W_2, I_{\text{self}}, I_{\text{others}}, I_{\text{diff}}$, accuracy (forward, backward and their mean), and the Mantel $\rho$ for `ses-1` and `ses-2`. Values are reported as mean $\pm$ SD (average ± standard deviation), median [95% CI] (from the bootstrap) and FDR-corrected $q$-values.
-* **Table T2 (Element Results):** one row per element of every feature (feature × element, 3,230 rows in total). Columns: label (electrode or pair name), region, hemisphere (left, right or midline), within/between-region flag (whether a link joins two electrodes in the same region), Euclidean distance (straight-line distance between the two electrodes), $U_1(e), U_2(e), W(e), I_{\text{diff}}(e)$, raw $p$, FDR $q$, taxonomy class (Phase 5a) and the fraction of $0/0$ instances.
-* **Table T3 (Variance Partition):** feature × element. The proportions of infant (trait), session and epoch (state) variance, without and with the age term, plus model convergence flags (whether each model fit finished successfully). Proportions from fits that did not converge are shown as `NaN`.
-* **Table T4 (Robustness Summary):** check × feature. The main metrics under each of the 9 sensitivity analyses.
-* **Table T5 (Bookkeeping):** the completed subject metadata table (Section 2.2).
-* **Table T6 (Twin / Sibling Analysis):** 26 rows, one per feature set, summarising all twin comparisons.
+* **Table T1 (Global Summary):** 26 rows, one per feature set. Columns: $U_1, U_2, \Delta U, W_1, W_2, W_1 - O_1, W_2 - O_2, I_{\text{self}}, I_{\text{others}}, I_{\text{diff}}$, accuracy (forward, backward and their mean), and the Mantel $\rho$ for `ses-1` and `ses-2`. Where the analysis provides them, each is reported as:
+  * mean $\pm$ SD, with the column name saying what the SD is taken over (171 pairs for $U_s$ and $\Delta U$, 19 infants for $W_s$, $W_s - O_s$, $I_{\text{self}}$ and $I_{\text{diff}}$, 342 off-diagonal cells for $I_{\text{others}}$);
+  * median [95% CI] from the infant bootstrap; for the Mantel $\rho$, the observed $\rho$ [95% CI];
+  * the raw p-value and its FDR q-value across the 26 feature sets, computed in `08_export_tables.py` from the p-values. The tests: the element-shuffle null for $U_s$, the paired bootstrap for $\Delta U$, the two-sided bootstrap test of $W_s - O_s$ against 0 (Phase 3), the column permutation for $I_{\text{diff}}$, each accuracy and the mean accuracy, and the Mantel test.
+
+  $I_{\text{diff}}$ and $\Delta U$ are in Jaccard units and accuracy in % (Step 7.5). $I_{\text{self}}$ and $I_{\text{others}}$ have no p-value of their own. P- and q-values are stored as plain numbers, so the table can be sorted by them.
+* **Table T1b (Interval and Age Correlations):** 26 rows, one per feature set (Phase 6, item 2). The Spearman $\rho$ of $\text{self}(a)$ and of $i_{\text{diff}}(a)$ with the inter-session interval and with the age at `ses-1`, each as $\rho$ [95% CI] with its permutation p and FDR q across the 26 feature sets; and, for `sub-NORB00064` and `sub-NORB00069`, the interval, $\text{self}(a)$ and $i_{\text{diff}}(a)$ (Step 4, item 7).
+* **Table T2 (Element Results):** one row per element of every feature (feature × element, 3,230 rows in total). Columns: label (electrode or pair name), region, hemisphere (left, right or midline), within/between-region flag (whether a link joins two electrodes in the same region), Euclidean distance in mm (straight-line distance between the two electrodes), $U_1(e)$ and $U_2(e)$ each with raw $p$ and FDR $q$ (element-shuffle null), $\Delta U(e)$ with raw $p$ and FDR $q$ (paired bootstrap), $W_1(e)$, $W_2(e)$, $W_1(e) - O_1(e)$ and $W_2(e) - O_2(e)$ each with raw $p$ and FDR $q$ (bootstrap), $I_{\text{diff}}(e)$ with raw $p$ and FDR $q$ (column permutation), taxonomy class (Phase 5a) and the fraction of $0/0$ instances at each session.
+* **Table T2b (Regional Universality):** one row per feature, session and region (node features) or region pair (edge features): the number of elements, $U_s(g)$ as mean $\pm$ SD over the 171 pairs, and median [95% CI] from the infant bootstrap (Phase 2, item 4).
+* **Table T3 (Variance Partition):** feature × element. The proportions of infant (trait), session and epoch (state) variance, without and with the age term, plus one convergence flag for each model (unadjusted and age-adjusted). Proportions from fits that did not converge are shown as `NaN`.
+* **Table T4 (Robustness Summary):** check × feature, for checks 1–8 (174 rows). For $U_1$, $U_2$, $I_{\text{diff}}$ and the three accuracies: the baseline value, the value under the check and the change; whether $I_{\text{diff}}$ kept its sign; and the four Phase 5a class counts under the baseline and under the check.
+* **Table T4b (Electrode Distance):** one row per edge feature (18 rows), for check 9: $\rho(U(e), \text{distance})$, $\rho(I_{\text{diff}}(e), \text{distance})$, and the within- minus between-region difference of $U(e)$ before and after regressing out distance, each with its 95% CI, p and FDR q.
+* **Table T5 (Bookkeeping):** one row per infant (Step 0, item 6; Section 2.2). Columns: participant ID, sex (read from `participants.tsv`), age at `ses-1` and `ses-2` and the interval between them (in days), the annotated and the usable epochs at each session (usable = the annotated window lies inside the recording), the 12 epochs used, twin status, and notes generated from the data (the twins, and the two short-gap infants reported individually in Phase 6).
+* **Table T5b (Threshold Bookkeeping):** one row per GCC-thresholded network family (broadband, delta, theta, alpha, beta) and session (Step 0, item 5): the minimum, median and maximum of $\tau_c$, of the number of links and of the edge density (links / 171). $\tau_c$ is recomputed from the weighted networks with the Phase 1 rule, and the code stops if any recomputed network differs from the saved binary adjacency. The values are in Section 2.2.
+* **Table T6 (Twin / Sibling Analysis):** 26 rows, one per feature set, with every value of the sibling analysis (Phase 6, item 4):
+  * the twins' similarity and its percentile rank among all pairs and within both matched sets, with each matched set's median, range and size;
+  * the four cross-session cells $M[86, 86]$, $M[87, 87]$, $M[86, 87]$ and $M[87, 86]$, with the rank of each cross cell in its row and its column;
+  * which twin, if any, is identified as the other, and in which direction (forward or backward);
+  * the number of elements where either twin is identified as the other;
+  * the shared elements with their Phase 5a class, and how many are individual;
+  * the same-day control note.
 
 ### 6.2 Figures (Vector PDF Format)
 
-Vector PDFs stay sharp at any zoom; PNG copies are saved as well.
+Vector PDFs stay sharp at any zoom; PNG copies are saved as well. Every number written on a figure is read from the results, and titles describe what is plotted rather than a conclusion. Where a figure shows a few key features, a supplementary file covers all 26 (a grid, or a multi-page PDF with one feature per page). `figures/README.md` lists every file.
 
-* **Figure 1:** heatmaps (colour-coded grids) of the $19 \times 19$ identifiability matrix $M$ for each feature (rows: `ses-1`, columns: `ses-2`, with the diagonal, the same-infant cells, highlighted).
-* **Figure 2:** forest plots showing $U_1, U_2, W_1, W_2, I_{\text{self}}, I_{\text{others}}$ side by side, each as a point with a line showing its 95% bootstrap CI.
-* **Figure 3:** the 2D universality vs. individuality quadrant scatter plots ($U(e)$ against $I_{\text{diff}}(e)$), with coloured regions and the number of elements in each quadrant.
-* **Figure 4:** topographical scalp maps (the head seen from above, coloured at the electrode positions) showing node $I_{\text{diff}}(e)$, and the edge connections that are significant after FDR correction.
-* **Figure 5:** developmental scatter plots: $\Delta U$ for each feature, and $I_{\text{self}}(a)$ (each infant's own $M[a, a]$) against the inter-session interval, highlighting `00064` and `00069`.
-* **Figure 6:** stacked bar charts of the variance decomposition ($\sigma^2_{\text{Subject}}, \sigma^2_{\text{Session}}, \sigma^2_{\text{Epoch}}$) for each feature and region, each bar split into the three parts.
-* **Figure 7:** heatmaps of every element across all 171 pairs, with the pairs sorted by their absolute age difference $|\Delta\text{age}|$; midline electrodes are marked "M".
+* **Figure 1:** heatmaps (colour-coded grids) of the $19 \times 19$ identifiability matrix $M$ (rows: `ses-1`, columns: `ses-2`, infants in the same order, with the diagonal, the same-infant cells, highlighted), each with its own colour scale and colour bar. Six key features in the main figure, all 26 in the supplement; titles give $I_{\text{diff}}$ with its FDR q and the identification accuracy.
+* **Figure 2:** for every feature, $U_1, U_2, W_1, W_2, I_{\text{self}}, I_{\text{others}}$ side by side, each as its estimate with a line showing its 95% infant bootstrap CI.
+* **Figure 3:** the universality–individuality plane of Phase 5a, one point per element at $x = U(e)$, $y = I_{\text{diff}}(e)$. Points are coloured by region (nodes) or region pair (edges), with a circle for within-region and a triangle for between-region edges. The Phase 5a classes are shown by the marker: filled when $U(e)$ is significant at both sessions, with a black ring when $I_{\text{diff}}(e)$ is significant. They come from the FDR-corrected tests, not from where a point lies. Four key features, plus all 26 in the supplement.
+* **Figure 4:** topographical scalp maps (the head seen from above). Node features: every electrode coloured by $I_{\text{diff}}(e)$ on a scale centred on 0 (it can be negative), with FDR-significant electrodes ringed. Edge features: only the edges whose $I_{\text{diff}}(e)$ is FDR-significant ($q < 0.05$) are drawn. Four key features, plus all 26 in the supplement.
+* **Figure 5:** $\Delta U$ for each feature with its CI, coloured by whether its FDR q across features is below 0.05; and each infant's self-similarity $M[a, a]$ against the inter-session interval, labelling `00064` and `00069` with their values and giving the Spearman $\rho$ with its 95% CI, p and q.
+* **Figure 6:** stacked bar charts of the variance partition (infant / trait, session, epoch / state), averaged over each feature's elements and, in the supplement, by region or region pair for every modelled feature. Only converged fits are averaged, and the number of fits is shown.
+* **Figure 7:** heatmaps of every element across all 171 infant pairs at `ses-1` and `ses-2`, with the pairs sorted by their absolute age difference $|\Delta\text{age}|$ and the colour scale fixed at 0–1. A strip above each heatmap gives each column's hemispheric category, with midline labelled "M". The twin pair is marked. f01 in the main figure, all 26 features in a multi-page supplement.
+* **Sibling figure** (Phase 6, item 4): for each feature and session, the distribution of the 171 pair similarities with the twin pair and both matched comparison sets marked. f01 in the main figure, all 26 features in a multi-page supplement.
+* **Threshold bars** (not in the plan's list; the region summary of the legacy notebooks): for each session, the percentage of the element similarities $J(e)$ (all 171 infant pairs × the elements of a region or region pair) above 0.75 and 0.90, and above 0.50 and 0.30, as grouped bars stacked by hemispheric category. Undefined (0/0) values are left out of the percentage, and the panel title says how many there are. f01 in the main figure, all 26 features in a multi-page supplement, and a four-page grid with the four weighted node features (f02, f04, f06, f08) and the same four measures on edges (f03, f05, f07, f09) side by side: one page per element type and threshold pair (0.75 and 0.90, or 0.50 and 0.30), ses-1 above ses-2, with larger text.
 
 ### 6.3 Data Artifacts
 
@@ -749,6 +809,7 @@ The intermediate arrays are stored in `processed_tensors/` as `.npy` files, toge
 * `X_f.npy`, shape $(19, 2, 12, n)$: the feature tensor, e.g. `X_f01.npy`.
 * `M_f.npy`, shape $(19, 19)$: the cross-session matrix.
 * `J_pair_f.npy`, shape $(171, n)$: the pair-by-element similarities, one file per feature and session (e.g. `J_pair_f01_ses-1.npy`).
+* `J_region_f.npy`, shape $(171, G)$: the pairs × regions matrix of Phase 2, item 4, one file per feature and session.
 
 ---
 
@@ -771,6 +832,8 @@ The intermediate arrays are stored in `processed_tensors/` as `.npy` files, toge
 │   ├── 07_robustness_checks.py            <- Step 8: 9 sensitivity analyses
 │   ├── 08_export_tables.py                <- Compiles Tables T1-T6 (CSV + Markdown)
 │   └── 09_generate_figures.py             <- Generates Figures 1-7 (PDF + PNG)
+├── tests/
+│   └── test_edge_closeness.py             <- Step 0 item 3: closeness against hand-computed toy values
 ├── processed_tensors/                     <- Saved .npy tensors & README
 ├── tables/                                <- Output CSV tables (T1-T6)
 ├── figures/                               <- Output Vector PDF figures (Fig1-Fig7)
@@ -785,11 +848,12 @@ The intermediate arrays are stored in `processed_tensors/` as `.npy` files, toge
 | Topic | Status | Where |
 | :--- | :--- | :--- |
 | Main rule for $0/0$ | Code uses `NaN`; the supervisor recalls deciding $0/0 = 0$ on physiological grounds. **Decision needed.** | Section 4.1 |
-| Volume conduction check (dwPLI) | Does not use MNE-Connectivity yet; must be re-implemented following its documentation. | Phase 8, check 7 |
-| Average reference check | Needs review with literature backing before use. | Phase 8, check 6 |
-| Element-level $\Delta U(e)$ | Reported without a statistical test; bootstrap and FDR still to be implemented. | Phase 6, item 1 |
-| FDR scope | Element tests are corrected within each feature, and the Phase 4 global tests across the 26 feature sets. The global tests of Phases 2 and 3 are not yet corrected across feature sets, and Table T1 does not yet show the new Phase 4 q-values. | Phase 7 |
-| Number of permutations | Repeat the permutation tests (Phase 6, and the other permutation tests) with 50,000, 100,000 and 2,000,000 permutations, plus intermediate values chosen from the results, and check that p-values and significance stay stable. Not run yet; the current default is 200,000. | Phases 6 and 7 |
+| Volume conduction check (dwPLI) | Now uses MNE-Connectivity (`wpli2_debiased`, per band). Open: dwPLI gives one network per recording ($K = 1$), and the delta band starts at about 2 Hz with 2.56-second windows; both should be stated when reporting it. | Phase 8, check 7 |
+| Average reference check | Implemented for all 26 features; the interpretation still needs review with literature backing before use. | Phase 8, check 6 |
+| Edge closeness reference | The hand-computed toy values (`tests/test_edge_closeness.py`) match the Bröhl & Lehnertz (2022) formula used here; compare them with the code of the Communications Physics paper (its Eq. 9), which is not in this repository. | Section 3.2 |
+| FDR scope | Element tests are corrected within each feature, and the global tests of Phases 4 and 6 (including $\Delta U$) across the 26 feature sets. Phases 2 and 3 do not correct their global tests themselves; Table T1 does it for every global test, so all q-values appear there. | Phase 7, Section 6.1 |
+| Same-day control (twins) | Cannot be done: the dataset has no recording dates. | Phase 6, item 4 |
+| Number of permutations | Repeat the permutation tests (Phase 6, and the other permutation tests) with 50,000, 100,000 and 2,000,000 permutations, plus intermediate values chosen from the results, and check that p-values and significance stay stable. Not run yet; the default and the reported results use 200,000, and `--permutations` sets any other number. | Phases 6 and 7 |
 | Epoch length | Two recordings (`sub-NORB00089` and `sub-NORB00103`, `ses-1`) have annotated windows longer than 2.56 s (up to 4.4 s and 5.4 s), which are used at full length. | Section 2.1, Phase 1 |
 | Alpha (and other) sub-bands | Future analysis of sub-bands such as $\alpha_1$, $\alpha_2$. | Section 3.2 |
 | Twin analysis | To be treated as a special case study; possibly its own section if the results are presentable. | Phase 6, item 4 |
