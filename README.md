@@ -149,6 +149,9 @@ HonoursM26/
 │   ├── metadata.json               # The infant list, electrode order and feature names
 │   └── *_results.json              # Summary results from each phase
 │
+├── zero_rule_comparison/           # Side analysis: every result under 0/0 = NaN and 0/0 = 0 (code, tables,
+│                                   #   figures, and a plain-language README of the differences)
+│
 ├── Infants_data/                   # The raw EEG dataset (103 infants, standard BIDS format)
 │
 └── legacyCode/                     # Older exploratory notebooks and scripts, kept for reference

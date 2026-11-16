@@ -1,0 +1,621 @@
+Feature ID,Quantity,Values compared,Max |difference|,Values differing by > 1e-9
+f01,"J(e) of every pair, ses-1",29241,0.0,0
+f01,U_1,1,0.0,0
+f01,U_1(e),171,0.0,0
+f01,U_1(g) and its 95% CI,45,3.3306690738754696e-16,0
+f01,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f01,W_1(e) - O_1(e),171,0.0,0
+f01,p W_1(e) - O_1(e),171,0.0,0
+f01,"J(e) of every pair, ses-2",29241,0.0,0
+f01,U_2,1,0.0,0
+f01,U_2(e),171,0.0,0
+f01,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f01,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f01,W_2(e) - O_2(e),171,0.0,0
+f01,p W_2(e) - O_2(e),171,0.0,0
+f01,"Delta U, p",2,0.0,0
+f01,Delta U(e),171,0.0,0
+f01,p Delta U(e),171,0.0,0
+f01,"I_self, I_others, I_diff",3,0.0,0
+f01,"Accuracy forward, backward, mean",3,0.0,0
+f01,p I_diff and p accuracy,4,0.0,0
+f01,I_diff(e),171,0.0,0
+f01,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f02,"J(e) of every pair, ses-1",3249,0.0,0
+f02,U_1,1,0.0,0
+f02,U_1(e),19,0.0,0
+f02,"p U_1(e) (element-shuffle test, drawn differently)",19,0.0019049904750476354,12
+f02,U_1(e) significant (q < 0.05) disagrees,19,0.0,0
+f02,U_1(g) and its 95% CI,15,1.6653345369377348e-16,0
+f02,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f02,W_1(e) - O_1(e),19,0.0,0
+f02,p W_1(e) - O_1(e),19,0.0,0
+f02,"J(e) of every pair, ses-2",3249,0.0,0
+f02,U_2,1,0.0,0
+f02,U_2(e),19,0.0,0
+f02,"p U_2(e) (element-shuffle test, drawn differently)",19,0.0024849875750621586,12
+f02,U_2(e) significant (q < 0.05) disagrees,19,0.0,0
+f02,U_2(g) and its 95% CI,15,5.551115123125783e-17,0
+f02,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f02,W_2(e) - O_2(e),19,0.0,0
+f02,p W_2(e) - O_2(e),19,0.0,0
+f02,"Delta U, p",2,0.0,0
+f02,Delta U(e),19,0.0,0
+f02,p Delta U(e),19,0.0,0
+f02,"I_self, I_others, I_diff",3,0.0,0
+f02,"Accuracy forward, backward, mean",3,0.0,0
+f02,p I_diff and p accuracy,4,0.0,0
+f02,I_diff(e),19,0.0,0
+f02,p I_diff(e) (saved run predates the tie tolerance),19,4.999975000127832e-06,1
+f03,"J(e) of every pair, ses-1",29241,0.0,0
+f03,U_1,1,0.0,0
+f03,U_1(e),171,0.0,0
+f03,"p U_1(e) (element-shuffle test, drawn differently)",171,0.0024599877000614917,61
+f03,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f03,U_1(g) and its 95% CI,45,3.3306690738754696e-16,0
+f03,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f03,W_1(e) - O_1(e),171,0.0,0
+f03,p W_1(e) - O_1(e),171,0.0,0
+f03,"J(e) of every pair, ses-2",29241,0.0,0
+f03,U_2,1,0.0,0
+f03,U_2(e),171,0.0,0
+f03,"p U_2(e) (element-shuffle test, drawn differently)",171,0.0034449827750860917,44
+f03,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f03,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f03,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f03,W_2(e) - O_2(e),171,0.0,0
+f03,p W_2(e) - O_2(e),171,0.0,0
+f03,"Delta U, p",2,0.0,0
+f03,Delta U(e),171,0.0,0
+f03,p Delta U(e),171,0.0,0
+f03,"I_self, I_others, I_diff",3,0.0,0
+f03,"Accuracy forward, backward, mean",3,0.0,0
+f03,p I_diff and p accuracy,4,0.0,0
+f03,I_diff(e),171,0.0,0
+f03,p I_diff(e) (saved run predates the tie tolerance),171,0.3508182459087704,36
+f04,"J(e) of every pair, ses-1",3249,0.0,0
+f04,U_1,1,0.0,0
+f04,U_1(e),19,0.0,0
+f04,U_1(g) and its 95% CI,15,4.440892098500626e-16,0
+f04,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f04,W_1(e) - O_1(e),19,0.0,0
+f04,p W_1(e) - O_1(e),19,0.0,0
+f04,"J(e) of every pair, ses-2",3249,0.0,0
+f04,U_2,1,0.0,0
+f04,U_2(e),19,0.0,0
+f04,U_2(g) and its 95% CI,15,4.440892098500626e-16,0
+f04,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f04,W_2(e) - O_2(e),19,0.0,0
+f04,p W_2(e) - O_2(e),19,0.0,0
+f04,"Delta U, p",2,0.0,0
+f04,Delta U(e),19,0.0,0
+f04,p Delta U(e),19,0.0,0
+f04,"I_self, I_others, I_diff",3,0.0,0
+f04,"Accuracy forward, backward, mean",3,0.0,0
+f04,p I_diff and p accuracy,4,0.0,0
+f04,I_diff(e),19,0.0,0
+f04,p I_diff(e) (saved run predates the tie tolerance),19,0.0,0
+f05,"J(e) of every pair, ses-1",29241,0.0,0
+f05,U_1,1,0.0,0
+f05,U_1(e),171,0.0,0
+f05,U_1(g) and its 95% CI,45,3.3306690738754696e-16,0
+f05,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f05,W_1(e) - O_1(e),171,0.0,0
+f05,p W_1(e) - O_1(e),171,0.0,0
+f05,"J(e) of every pair, ses-2",29241,0.0,0
+f05,U_2,1,0.0,0
+f05,U_2(e),171,0.0,0
+f05,U_2(g) and its 95% CI,45,2.220446049250313e-16,0
+f05,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f05,W_2(e) - O_2(e),171,0.0,0
+f05,p W_2(e) - O_2(e),171,0.0,0
+f05,"Delta U, p",2,0.0,0
+f05,Delta U(e),171,0.0,0
+f05,p Delta U(e),171,0.0,0
+f05,"I_self, I_others, I_diff",3,0.0,0
+f05,"Accuracy forward, backward, mean",3,0.0,0
+f05,p I_diff and p accuracy,4,0.0,0
+f05,I_diff(e),171,0.0,0
+f05,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f06,"J(e) of every pair, ses-1",3249,0.0,0
+f06,U_1,1,0.0,0
+f06,U_1(e),19,0.0,0
+f06,U_1(g) and its 95% CI,15,2.220446049250313e-16,0
+f06,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f06,W_1(e) - O_1(e),19,0.0,0
+f06,p W_1(e) - O_1(e),19,0.0,0
+f06,"J(e) of every pair, ses-2",3249,0.0,0
+f06,U_2,1,0.0,0
+f06,U_2(e),19,0.0,0
+f06,U_2(g) and its 95% CI,15,5.551115123125783e-16,0
+f06,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f06,W_2(e) - O_2(e),19,0.0,0
+f06,p W_2(e) - O_2(e),19,0.0,0
+f06,"Delta U, p",2,0.0,0
+f06,Delta U(e),19,0.0,0
+f06,p Delta U(e),19,0.0,0
+f06,"I_self, I_others, I_diff",3,0.0,0
+f06,"Accuracy forward, backward, mean",3,0.0,0
+f06,p I_diff and p accuracy,4,0.0,0
+f06,I_diff(e),19,0.0,0
+f06,p I_diff(e) (saved run predates the tie tolerance),19,0.0,0
+f07,"J(e) of every pair, ses-1",29241,0.0,0
+f07,U_1,1,0.0,0
+f07,U_1(e),171,0.0,0
+f07,U_1(g) and its 95% CI,45,5.551115123125783e-16,0
+f07,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f07,W_1(e) - O_1(e),171,0.0,0
+f07,p W_1(e) - O_1(e),171,0.0,0
+f07,"J(e) of every pair, ses-2",29241,0.0,0
+f07,U_2,1,0.0,0
+f07,U_2(e),171,0.0,0
+f07,U_2(g) and its 95% CI,45,5.551115123125783e-16,0
+f07,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f07,W_2(e) - O_2(e),171,0.0,0
+f07,p W_2(e) - O_2(e),171,0.0,0
+f07,"Delta U, p",2,0.0,0
+f07,Delta U(e),171,0.0,0
+f07,p Delta U(e),171,0.0,0
+f07,"I_self, I_others, I_diff",3,0.0,0
+f07,"Accuracy forward, backward, mean",3,0.0,0
+f07,p I_diff and p accuracy,4,0.0,0
+f07,I_diff(e),171,0.0,0
+f07,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f08,"J(e) of every pair, ses-1",3249,0.0,0
+f08,U_1,1,0.0,0
+f08,U_1(e),19,0.0,0
+f08,U_1(g) and its 95% CI,15,6.661338147750939e-16,0
+f08,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f08,W_1(e) - O_1(e),19,0.0,0
+f08,p W_1(e) - O_1(e),19,0.0,0
+f08,"J(e) of every pair, ses-2",3249,0.0,0
+f08,U_2,1,0.0,0
+f08,U_2(e),19,0.0,0
+f08,U_2(g) and its 95% CI,15,4.440892098500626e-16,0
+f08,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f08,W_2(e) - O_2(e),19,0.0,0
+f08,p W_2(e) - O_2(e),19,0.0,0
+f08,"Delta U, p",2,0.0,0
+f08,Delta U(e),19,0.0,0
+f08,p Delta U(e),19,0.0,0
+f08,"I_self, I_others, I_diff",3,0.0,0
+f08,"Accuracy forward, backward, mean",3,0.0,0
+f08,p I_diff and p accuracy,4,0.0,0
+f08,I_diff(e),19,0.0,0
+f08,p I_diff(e) (saved run predates the tie tolerance),19,0.0,0
+f09,"J(e) of every pair, ses-1",29241,0.0,0
+f09,U_1,1,0.0,0
+f09,U_1(e),171,0.0,0
+f09,U_1(g) and its 95% CI,45,9.992007221626409e-16,0
+f09,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f09,W_1(e) - O_1(e),171,0.0,0
+f09,p W_1(e) - O_1(e),171,0.0,0
+f09,"J(e) of every pair, ses-2",29241,0.0,0
+f09,U_2,1,0.0,0
+f09,U_2(e),171,0.0,0
+f09,U_2(g) and its 95% CI,45,6.661338147750939e-16,0
+f09,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f09,W_2(e) - O_2(e),171,0.0,0
+f09,p W_2(e) - O_2(e),171,0.0,0
+f09,"Delta U, p",2,0.0,0
+f09,Delta U(e),171,0.0,0
+f09,p Delta U(e),171,0.0,0
+f09,"I_self, I_others, I_diff",3,0.0,0
+f09,"Accuracy forward, backward, mean",3,0.0,0
+f09,p I_diff and p accuracy,4,0.0,0
+f09,I_diff(e),171,0.0,0
+f09,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f10,"J(e) of every pair, ses-1",29241,0.0,0
+f10,U_1,1,0.0,0
+f10,U_1(e),171,0.0,0
+f10,"p U_1(e) (element-shuffle test, drawn differently)",171,0.003959980200098967,87
+f10,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f10,U_1(g) and its 95% CI,45,7.771561172376096e-16,0
+f10,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f10,W_1(e) - O_1(e),171,0.0,0
+f10,p W_1(e) - O_1(e),171,0.0,0
+f10,"J(e) of every pair, ses-2",29241,0.0,0
+f10,U_2,1,0.0,0
+f10,U_2(e),171,0.0,0
+f10,"p U_2(e) (element-shuffle test, drawn differently)",171,0.002234988825055871,92
+f10,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f10,U_2(g) and its 95% CI,45,6.661338147750939e-16,0
+f10,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f10,W_2(e) - O_2(e),171,0.0,0
+f10,p W_2(e) - O_2(e),171,0.0,0
+f10,"Delta U, p",2,0.0,0
+f10,Delta U(e),171,0.0,0
+f10,p Delta U(e),171,0.0,0
+f10,"I_self, I_others, I_diff",3,0.0,0
+f10,"Accuracy forward, backward, mean",3,0.0,0
+f10,p I_diff and p accuracy,4,0.0,0
+f10,I_diff(e),171,0.0,0
+f10,p I_diff(e) (saved run predates the tie tolerance),171,0.9999950000249999,65
+f11,"J(e) of every pair, ses-1",3249,0.0,0
+f11,U_1,1,0.0,0
+f11,U_1(e),19,0.0,0
+f11,"p U_1(e) (element-shuffle test, drawn differently)",19,0.0006999965000173969,9
+f11,U_1(e) significant (q < 0.05) disagrees,19,0.0,0
+f11,U_1(g) and its 95% CI,15,1.1102230246251565e-16,0
+f11,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f11,W_1(e) - O_1(e),19,0.0,0
+f11,p W_1(e) - O_1(e),19,0.0,0
+f11,"J(e) of every pair, ses-2",3249,0.0,0
+f11,U_2,1,0.0,0
+f11,U_2(e),19,0.0,0
+f11,"p U_2(e) (element-shuffle test, drawn differently)",19,0.0010699946500267732,9
+f11,U_2(e) significant (q < 0.05) disagrees,19,0.0,0
+f11,U_2(g) and its 95% CI,15,1.3877787807814457e-16,0
+f11,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f11,W_2(e) - O_2(e),19,0.0,0
+f11,p W_2(e) - O_2(e),19,0.0,0
+f11,"Delta U, p",2,0.0,0
+f11,Delta U(e),19,0.0,0
+f11,p Delta U(e),19,0.0,0
+f11,"I_self, I_others, I_diff",3,0.0,0
+f11,"Accuracy forward, backward, mean",3,0.0,0
+f11,p I_diff and p accuracy,4,0.0,0
+f11,I_diff(e),19,0.0,0
+f11,p I_diff(e) (saved run predates the tie tolerance),19,0.0,0
+f12,"J(e) of every pair, ses-1",29241,0.0,0
+f12,U_1,1,0.0,0
+f12,U_1(e),171,0.0,0
+f12,"p U_1(e) (element-shuffle test, drawn differently)",171,0.002619986900065485,90
+f12,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f12,U_1(g) and its 95% CI,45,1.6653345369377348e-16,0
+f12,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f12,W_1(e) - O_1(e),171,0.0,0
+f12,p W_1(e) - O_1(e),171,0.0,0
+f12,"J(e) of every pair, ses-2",29241,0.0,0
+f12,U_2,1,0.0,0
+f12,U_2(e),171,0.0,0
+f12,"p U_2(e) (element-shuffle test, drawn differently)",171,0.002329988350058265,88
+f12,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f12,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f12,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f12,W_2(e) - O_2(e),171,0.0,0
+f12,p W_2(e) - O_2(e),171,0.0,0
+f12,"Delta U, p",2,0.0,0
+f12,Delta U(e),171,0.0,0
+f12,p Delta U(e),171,0.0,0
+f12,"I_self, I_others, I_diff",3,0.0,0
+f12,"Accuracy forward, backward, mean",3,0.0,0
+f12,p I_diff and p accuracy,4,0.0,0
+f12,I_diff(e),171,0.0,0
+f12,p I_diff(e) (saved run predates the tie tolerance),171,0.00992995035024824,6
+f13,"J(e) of every pair, ses-1",3249,0.0,0
+f13,U_1,1,0.0,0
+f13,U_1(e),19,0.0,0
+f13,U_1(g) and its 95% CI,15,3.3306690738754696e-16,0
+f13,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f13,W_1(e) - O_1(e),19,0.0,0
+f13,p W_1(e) - O_1(e),19,0.0,0
+f13,"J(e) of every pair, ses-2",3249,0.0,0
+f13,U_2,1,0.0,0
+f13,U_2(e),19,0.0,0
+f13,U_2(g) and its 95% CI,15,2.220446049250313e-16,0
+f13,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f13,W_2(e) - O_2(e),19,0.0,0
+f13,p W_2(e) - O_2(e),19,0.0,0
+f13,"Delta U, p",2,0.0,0
+f13,Delta U(e),19,0.0,0
+f13,p Delta U(e),19,0.0,0
+f13,"I_self, I_others, I_diff",3,0.0,0
+f13,"Accuracy forward, backward, mean",3,0.0,0
+f13,p I_diff and p accuracy,4,0.0,0
+f13,I_diff(e),19,0.0,0
+f13,p I_diff(e) (saved run predates the tie tolerance),19,4.99997500014171e-06,1
+f14,"J(e) of every pair, ses-1",29241,0.0,0
+f14,U_1,1,0.0,0
+f14,U_1(e),171,0.0,0
+f14,"p U_1(e) (element-shuffle test, drawn differently)",171,0.003289983550082254,90
+f14,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f14,U_1(g) and its 95% CI,45,2.220446049250313e-16,0
+f14,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f14,W_1(e) - O_1(e),171,0.0,0
+f14,p W_1(e) - O_1(e),171,0.0,0
+f14,"J(e) of every pair, ses-2",29241,0.0,0
+f14,U_2,1,0.0,0
+f14,U_2(e),171,0.0,0
+f14,"p U_2(e) (element-shuffle test, drawn differently)",171,0.00300498497507512,92
+f14,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f14,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f14,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f14,W_2(e) - O_2(e),171,0.0,0
+f14,p W_2(e) - O_2(e),171,0.0,0
+f14,"Delta U, p",2,0.0,0
+f14,Delta U(e),171,0.0,0
+f14,p Delta U(e),171,0.0,0
+f14,"I_self, I_others, I_diff",3,0.0,0
+f14,"Accuracy forward, backward, mean",3,0.0,0
+f14,p I_diff and p accuracy,4,0.0,0
+f14,I_diff(e),171,0.0,0
+f14,p I_diff(e) (saved run predates the tie tolerance),171,0.018664906675466636,5
+f15,"J(e) of every pair, ses-1",3249,0.0,0
+f15,U_1,1,0.0,0
+f15,U_1(e),19,0.0,0
+f15,U_1(g) and its 95% CI,15,5.551115123125783e-17,0
+f15,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f15,W_1(e) - O_1(e),19,0.0,0
+f15,p W_1(e) - O_1(e),19,0.0,0
+f15,"J(e) of every pair, ses-2",3249,0.0,0
+f15,U_2,1,0.0,0
+f15,U_2(e),19,0.0,0
+f15,U_2(g) and its 95% CI,15,3.3306690738754696e-16,0
+f15,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f15,W_2(e) - O_2(e),19,0.0,0
+f15,p W_2(e) - O_2(e),19,0.0,0
+f15,"Delta U, p",2,0.0,0
+f15,Delta U(e),19,0.0,0
+f15,p Delta U(e),19,0.0,0
+f15,"I_self, I_others, I_diff",3,0.0,0
+f15,"Accuracy forward, backward, mean",3,0.0,0
+f15,p I_diff and p accuracy,4,0.0,0
+f15,I_diff(e),19,0.0,0
+f15,p I_diff(e) (saved run predates the tie tolerance),19,0.0,0
+f16,"J(e) of every pair, ses-1",29241,0.0,0
+f16,U_1,1,0.0,0
+f16,U_1(e),171,0.0,0
+f16,"p U_1(e) (element-shuffle test, drawn differently)",171,0.00401497992510047,103
+f16,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f16,U_1(g) and its 95% CI,45,1.6653345369377348e-16,0
+f16,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f16,W_1(e) - O_1(e),171,0.0,0
+f16,p W_1(e) - O_1(e),171,0.0,0
+f16,"J(e) of every pair, ses-2",29241,0.0,0
+f16,U_2,1,0.0,0
+f16,U_2(e),171,0.0,0
+f16,"p U_2(e) (element-shuffle test, drawn differently)",171,0.003834980825095924,92
+f16,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f16,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f16,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f16,W_2(e) - O_2(e),171,0.0,0
+f16,p W_2(e) - O_2(e),171,0.0,0
+f16,"Delta U, p",2,0.0,0
+f16,Delta U(e),171,0.0,0
+f16,p Delta U(e),171,0.0,0
+f16,"I_self, I_others, I_diff",3,0.0,0
+f16,"Accuracy forward, backward, mean",3,0.0,0
+f16,p I_diff and p accuracy,4,0.0,0
+f16,I_diff(e),171,0.0,0
+f16,p I_diff(e) (saved run predates the tie tolerance),171,0.026304868475657606,6
+f17,"J(e) of every pair, ses-1",3249,0.0,0
+f17,U_1,1,0.0,0
+f17,U_1(e),19,0.0,0
+f17,U_1(g) and its 95% CI,15,3.3306690738754696e-16,0
+f17,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f17,W_1(e) - O_1(e),19,0.0,0
+f17,p W_1(e) - O_1(e),19,0.0,0
+f17,"J(e) of every pair, ses-2",3249,0.0,0
+f17,U_2,1,0.0,0
+f17,U_2(e),19,0.0,0
+f17,U_2(g) and its 95% CI,15,2.220446049250313e-16,0
+f17,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f17,W_2(e) - O_2(e),19,0.0,0
+f17,p W_2(e) - O_2(e),19,0.0,0
+f17,"Delta U, p",2,0.0,0
+f17,Delta U(e),19,0.0,0
+f17,p Delta U(e),19,0.0,0
+f17,"I_self, I_others, I_diff",3,0.0,0
+f17,"Accuracy forward, backward, mean",3,0.0,0
+f17,p I_diff and p accuracy,4,0.0,0
+f17,I_diff(e),19,0.0,0
+f17,p I_diff(e) (saved run predates the tie tolerance),19,0.0,0
+f18,"J(e) of every pair, ses-1",29241,0.0,0
+f18,U_1,1,0.0,0
+f18,U_1(e),171,0.0,0
+f18,"p U_1(e) (element-shuffle test, drawn differently)",171,0.0033299833500832765,92
+f18,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f18,U_1(g) and its 95% CI,45,1.6653345369377348e-16,0
+f18,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f18,W_1(e) - O_1(e),171,0.0,0
+f18,p W_1(e) - O_1(e),171,0.0,0
+f18,"J(e) of every pair, ses-2",29241,0.0,0
+f18,U_2,1,0.0,0
+f18,U_2(e),171,0.0,0
+f18,"p U_2(e) (element-shuffle test, drawn differently)",171,0.0026349868250659103,92
+f18,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f18,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f18,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f18,W_2(e) - O_2(e),171,0.0,0
+f18,p W_2(e) - O_2(e),171,0.0,0
+f18,"Delta U, p",2,0.0,0
+f18,Delta U(e),171,0.0,0
+f18,p Delta U(e),171,0.0,0
+f18,"I_self, I_others, I_diff",3,0.0,0
+f18,"Accuracy forward, backward, mean",3,0.0,0
+f18,p I_diff and p accuracy,4,0.0,0
+f18,I_diff(e),171,0.0,0
+f18,p I_diff(e) (saved run predates the tie tolerance),171,0.026304868475657606,9
+f19,"J(e) of every pair, ses-1",29241,0.0,0
+f19,U_1,1,0.0,0
+f19,U_1(e),171,0.0,0
+f19,U_1(g) and its 95% CI,45,6.661338147750939e-16,0
+f19,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f19,W_1(e) - O_1(e),171,0.0,0
+f19,p W_1(e) - O_1(e),171,0.0,0
+f19,"J(e) of every pair, ses-2",29241,0.0,0
+f19,U_2,1,0.0,0
+f19,U_2(e),171,0.0,0
+f19,U_2(g) and its 95% CI,45,4.440892098500626e-16,0
+f19,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f19,W_2(e) - O_2(e),171,0.0,0
+f19,p W_2(e) - O_2(e),171,0.0,0
+f19,"Delta U, p",2,0.0,0
+f19,Delta U(e),171,0.0,0
+f19,p Delta U(e),171,0.0,0
+f19,"I_self, I_others, I_diff",3,0.0,0
+f19,"Accuracy forward, backward, mean",3,0.0,0
+f19,p I_diff and p accuracy,4,0.005194974025129874,1
+f19,I_diff(e),171,0.0,0
+f19,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f20,"J(e) of every pair, ses-1",29241,0.0,0
+f20,U_1,1,0.0,0
+f20,U_1(e),171,0.0,0
+f20,"p U_1(e) (element-shuffle test, drawn differently)",171,0.0029199854000729886,87
+f20,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f20,U_1(g) and its 95% CI,45,8.881784197001252e-16,0
+f20,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f20,W_1(e) - O_1(e),171,0.0,0
+f20,p W_1(e) - O_1(e),171,0.0,0
+f20,"J(e) of every pair, ses-2",29241,0.0,0
+f20,U_2,1,0.0,0
+f20,U_2(e),171,0.0,0
+f20,"p U_2(e) (element-shuffle test, drawn differently)",171,0.005369973150134211,97
+f20,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f20,U_2(g) and its 95% CI,45,9.992007221626409e-16,0
+f20,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f20,W_2(e) - O_2(e),171,0.0,0
+f20,p W_2(e) - O_2(e),171,0.0,0
+f20,"Delta U, p",2,0.0,0
+f20,Delta U(e),171,0.0,0
+f20,p Delta U(e),171,0.0,0
+f20,"I_self, I_others, I_diff",3,0.0,0
+f20,"Accuracy forward, backward, mean",3,0.0,0
+f20,p I_diff and p accuracy,4,0.0,0
+f20,I_diff(e),171,0.0,0
+f20,p I_diff(e) (saved run predates the tie tolerance),171,0.9999950000249999,74
+f21,"J(e) of every pair, ses-1",29241,0.0,0
+f21,U_1,1,0.0,0
+f21,U_1(e),171,0.0,0
+f21,U_1(g) and its 95% CI,45,5.551115123125783e-16,0
+f21,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f21,W_1(e) - O_1(e),171,0.0,0
+f21,p W_1(e) - O_1(e),171,0.0,0
+f21,"J(e) of every pair, ses-2",29241,0.0,0
+f21,U_2,1,0.0,0
+f21,U_2(e),171,0.0,0
+f21,U_2(g) and its 95% CI,45,5.551115123125783e-16,0
+f21,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f21,W_2(e) - O_2(e),171,0.0,0
+f21,p W_2(e) - O_2(e),171,0.0,0
+f21,"Delta U, p",2,0.0,0
+f21,Delta U(e),171,0.0,0
+f21,p Delta U(e),171,0.0,0
+f21,"I_self, I_others, I_diff",3,0.0,0
+f21,"Accuracy forward, backward, mean",3,0.0,0
+f21,p I_diff and p accuracy,4,0.0,0
+f21,I_diff(e),171,0.0,0
+f21,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f22,"J(e) of every pair, ses-1",29241,0.0,0
+f22,U_1,1,0.0,0
+f22,U_1(e),171,0.0,0
+f22,"p U_1(e) (element-shuffle test, drawn differently)",171,0.003079984600076968,107
+f22,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f22,U_1(g) and its 95% CI,45,7.771561172376096e-16,0
+f22,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f22,W_1(e) - O_1(e),171,0.0,0
+f22,p W_1(e) - O_1(e),171,0.0,0
+f22,"J(e) of every pair, ses-2",29241,0.0,0
+f22,U_2,1,0.0,0
+f22,U_2(e),171,0.0,0
+f22,"p U_2(e) (element-shuffle test, drawn differently)",171,0.003064984675076654,103
+f22,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f22,U_2(g) and its 95% CI,45,4.440892098500626e-16,0
+f22,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f22,W_2(e) - O_2(e),171,0.0,0
+f22,p W_2(e) - O_2(e),171,0.0,0
+f22,"Delta U, p",2,0.0,0
+f22,Delta U(e),171,0.0,0
+f22,p Delta U(e),171,0.0,0
+f22,"I_self, I_others, I_diff",3,0.0,0
+f22,"Accuracy forward, backward, mean",3,0.0,0
+f22,p I_diff and p accuracy,4,0.0,0
+f22,I_diff(e),171,0.0,0
+f22,p I_diff(e) (saved run predates the tie tolerance),171,0.9999950000249999,65
+f23,"J(e) of every pair, ses-1",29241,0.0,0
+f23,U_1,1,0.0,0
+f23,U_1(e),171,0.0,0
+f23,U_1(g) and its 95% CI,45,3.3306690738754696e-16,0
+f23,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f23,W_1(e) - O_1(e),171,0.0,0
+f23,p W_1(e) - O_1(e),171,0.0,0
+f23,"J(e) of every pair, ses-2",29241,0.0,0
+f23,U_2,1,0.0,0
+f23,U_2(e),171,0.0,0
+f23,U_2(g) and its 95% CI,45,5.551115123125783e-16,0
+f23,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f23,W_2(e) - O_2(e),171,0.0,0
+f23,p W_2(e) - O_2(e),171,0.0,0
+f23,"Delta U, p",2,0.0,0
+f23,Delta U(e),171,0.0,0
+f23,p Delta U(e),171,0.0,0
+f23,"I_self, I_others, I_diff",3,0.0,0
+f23,"Accuracy forward, backward, mean",3,0.0,0
+f23,p I_diff and p accuracy,4,0.0,0
+f23,I_diff(e),171,0.0,0
+f23,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f24,"J(e) of every pair, ses-1",29241,0.0,0
+f24,U_1,1,0.0,0
+f24,U_1(e),171,0.0,0
+f24,"p U_1(e) (element-shuffle test, drawn differently)",171,0.002634986825065855,106
+f24,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f24,U_1(g) and its 95% CI,45,3.3306690738754696e-16,0
+f24,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f24,W_1(e) - O_1(e),171,0.0,0
+f24,p W_1(e) - O_1(e),171,0.0,0
+f24,"J(e) of every pair, ses-2",29241,0.0,0
+f24,U_2,1,0.0,0
+f24,U_2(e),171,0.0,0
+f24,"p U_2(e) (element-shuffle test, drawn differently)",171,0.0032399838000809478,103
+f24,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f24,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f24,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f24,W_2(e) - O_2(e),171,0.0,0
+f24,p W_2(e) - O_2(e),171,0.0,0
+f24,"Delta U, p",2,0.0,0
+f24,Delta U(e),171,0.0,0
+f24,p Delta U(e),171,0.0,0
+f24,"I_self, I_others, I_diff",3,0.0,0
+f24,"Accuracy forward, backward, mean",3,0.0,0
+f24,p I_diff and p accuracy,4,0.0,0
+f24,I_diff(e),171,0.0,0
+f24,p I_diff(e) (saved run predates the tie tolerance),171,0.9999950000249999,56
+f25,"J(e) of every pair, ses-1",29241,0.0,0
+f25,U_1,1,0.0,0
+f25,U_1(e),171,0.0,0
+f25,U_1(g) and its 95% CI,45,3.3306690738754696e-16,0
+f25,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f25,W_1(e) - O_1(e),171,0.0,0
+f25,p W_1(e) - O_1(e),171,0.0,0
+f25,"J(e) of every pair, ses-2",29241,0.0,0
+f25,U_2,1,0.0,0
+f25,U_2(e),171,0.0,0
+f25,U_2(g) and its 95% CI,45,5.551115123125783e-16,0
+f25,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f25,W_2(e) - O_2(e),171,0.0,0
+f25,p W_2(e) - O_2(e),171,0.0,0
+f25,"Delta U, p",2,0.0,0
+f25,Delta U(e),171,0.0,0
+f25,p Delta U(e),171,0.0,0
+f25,"I_self, I_others, I_diff",3,0.0,0
+f25,"Accuracy forward, backward, mean",3,0.0,0
+f25,p I_diff and p accuracy,4,0.0,0
+f25,I_diff(e),171,0.0,0
+f25,p I_diff(e) (saved run predates the tie tolerance),171,0.0,0
+f26,"J(e) of every pair, ses-1",29241,0.0,0
+f26,U_1,1,0.0,0
+f26,U_1(e),171,0.0,0
+f26,"p U_1(e) (element-shuffle test, drawn differently)",171,0.0035549822250888763,101
+f26,U_1(e) significant (q < 0.05) disagrees,171,0.0,0
+f26,U_1(g) and its 95% CI,45,3.3306690738754696e-16,0
+f26,"W_1, O_1, W_1 - O_1, p",4,0.0,0
+f26,W_1(e) - O_1(e),171,0.0,0
+f26,p W_1(e) - O_1(e),171,0.0,0
+f26,"J(e) of every pair, ses-2",29241,0.0,0
+f26,U_2,1,0.0,0
+f26,U_2(e),171,0.0,0
+f26,"p U_2(e) (element-shuffle test, drawn differently)",171,0.002444987775061136,99
+f26,U_2(e) significant (q < 0.05) disagrees,171,0.0,0
+f26,U_2(g) and its 95% CI,45,3.3306690738754696e-16,0
+f26,"W_2, O_2, W_2 - O_2, p",4,0.0,0
+f26,W_2(e) - O_2(e),171,0.0,0
+f26,p W_2(e) - O_2(e),171,0.0,0
+f26,"Delta U, p",2,0.0,0
+f26,Delta U(e),171,0.0,0
+f26,p Delta U(e),171,0.0,0
+f26,"I_self, I_others, I_diff",3,0.0,0
+f26,"Accuracy forward, backward, mean",3,0.0,0
+f26,p I_diff and p accuracy,4,0.0,0
+f26,I_diff(e),171,0.0,0
+f26,p I_diff(e) (saved run predates the tie tolerance),171,0.9999950000249999,57

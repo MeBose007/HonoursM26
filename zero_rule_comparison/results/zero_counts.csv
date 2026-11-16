@@ -1,0 +1,27 @@
+Feature ID,Feature Name,Type,Network,Has zero values,Zero values in X (%),Epoch comparisons 0/0 ses-1 (%),Pair J(e) undefined ses-1,S epoch pairs 0/0 ses-1,Epoch comparisons 0/0 ses-2 (%),Pair J(e) undefined ses-2,S epoch pairs 0/0 ses-2,Epoch comparisons 0/0 cross-session (%),M_e cells undefined,S epoch pairs 0/0 cross-session
+f01,broadband_weighted_correlation,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f02,broadband_weighted_node_betweenness,node,weighted,True,48.4533702677747,25.146198830409354,14,0,27.880373448240487,3,0,26.6134519123293,17,2
+f03,broadband_weighted_edge_betweenness,edge,weighted,True,34.23745767928593,20.06400829884979,2,0,16.02686866614229,1,0,17.87999546419141,11,0
+f04,broadband_weighted_node_strength,node,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f05,broadband_weighted_edge_strength,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f06,broadband_weighted_node_eigenvector,node,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f07,broadband_weighted_edge_eigenvector,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f08,broadband_weighted_node_closeness,node,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f09,broadband_weighted_edge_closeness,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f10,broadband_binary_adjacency,edge,binary,True,64.55191340925413,50.93504554107816,3609,0,52.931956271445344,5334,0,51.908549459212814,9212,0
+f11,broadband_binary_node_betweenness,node,binary,True,24.134349030470915,7.948599569098184,0,0,6.684107930645326,0,0,7.165767604607086,0,0
+f12,broadband_binary_edge_betweenness,edge,binary,True,64.55191340925413,50.93504554107816,3609,0,52.931956271445344,5334,0,51.908549459212814,9212,0
+f13,broadband_binary_node_degree,node,binary,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f14,broadband_binary_edge_strength,edge,binary,True,64.55191340925413,50.93504554107816,3609,0,52.931956271445344,5334,0,51.908549459212814,9212,0
+f15,broadband_binary_node_eigenvector,node,binary,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f16,broadband_binary_edge_eigenvector,edge,binary,True,64.55191340925413,50.93504554107816,3609,0,52.931956271445344,5334,0,51.908549459212814,9212,0
+f17,broadband_binary_node_closeness,node,binary,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f18,broadband_binary_edge_closeness,edge,binary,True,64.55191340925413,50.93504554107816,3609,0,52.931956271445344,5334,0,51.908549459212814,9212,0
+f19,delta_weighted_correlation,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f20,delta_binary_adjacency,edge,binary,True,63.68626243972504,49.06580942284236,2432,0,51.62414646101935,4047,0,50.31669663540198,6643,0
+f21,theta_weighted_correlation,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f22,theta_binary_adjacency,edge,binary,True,64.53395916692315,48.80333549924193,1685,0,52.78689739293002,3505,0,50.55334164898241,4945,0
+f23,alpha_weighted_correlation,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f24,alpha_binary_adjacency,edge,binary,True,69.78557504873294,57.430206445288015,5516,0,60.156686387834434,5694,0,58.59427732149703,11910,0
+f25,beta_weighted_correlation,edge,weighted,False,0.0,0.0,0,0,0.0,0,0,0.0,0,0
+f26,beta_binary_adjacency,edge,binary,True,66.5845901302965,48.989147657968836,4689,0,60.42030026332888,8411,0,54.382320066093214,13362,0
