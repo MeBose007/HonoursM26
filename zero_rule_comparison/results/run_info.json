@@ -1,0 +1,20 @@
+{
+  "n_permutations": 200000,
+  "seed": 42,
+  "features_with_zero_values": [
+    "f02",
+    "f03",
+    "f10",
+    "f11",
+    "f12",
+    "f14",
+    "f16",
+    "f18",
+    "f20",
+    "f22",
+    "f24",
+    "f26"
+  ],
+  "minutes": 27.2,
+  "note": "0/0 = NaN results recomputed with the current pipeline code; see validation_vs_pipeline.csv"
+}
